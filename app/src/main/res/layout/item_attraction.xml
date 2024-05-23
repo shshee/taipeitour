@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/FullWidthWrapHeight"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        style="@style/FullWidthWrapHeight"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_margin="@dimen/standard_padding">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/holder_img_attraction"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/standard_padding"
+            android:elevation="12dp"
+            app:cardCornerRadius="20dp">
+
+            <ImageView
+                android:id="@+id/img_view_attraction"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60sdp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher_round" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            style="@style/FullWidthHeight"
+            android:layout_toEndOf="@id/holder_img_attraction"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_title"
+                style="@style/TextAppearance.Bold"
+
+                tools:text="The Lin Yuatang House" />
+
+            <TextView
+                android:id="@+id/text_view_description"
+                style="@style/TextAppearance.H4"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="3"
+                tools:text="ABCDE" />
+
+            <TextView
+                style="@style/TextAppearance.H4"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="@string/view_more"
+                android:textColor="?attr/colorPrimary"
+                app:drawableEndCompat="@drawable/ic_next_12sdp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View style="@style/divider" />
+</LinearLayout>
