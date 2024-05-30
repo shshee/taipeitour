@@ -1,6 +1,6 @@
 # Introduction
 This project is a demo to show tours in Taipei, can view tours and their details by many languages.</br></br>
-![demo image](https://i.imgur.com/PlyX6OM.png)
+<img src="https://i.imgur.com/PlyX6OM.png" width="540">
 
 For an apk file of the application, [**Please download here**](https://drive.google.com/file/d/1ERuVVpecehWPibR56W8hT3P16vfwQADt/view?usp=sharing).</br>
 - Target SDK: 34 (Android 14)
