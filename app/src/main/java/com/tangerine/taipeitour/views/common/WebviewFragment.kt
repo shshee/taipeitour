@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.tangerine.core.ultis.setOnSingleClickListener
 import com.tangerine.taipeitour.databinding.FragmentWebviewBinding
-import com.tangerine.taipeitour.utils.setOnSingleClickListener
 import com.tangerine.taipeitour.views.base.BaseFragment
 
 

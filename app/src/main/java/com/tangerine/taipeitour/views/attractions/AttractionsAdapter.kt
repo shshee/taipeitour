@@ -20,16 +20,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.tangerine.core.ultis.fromHtml
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.ItemAttractionBinding
-import com.tangerine.taipeitour.models.Attraction
-import com.tangerine.taipeitour.utils.fromHtml
 import kotlin.properties.Delegates
 
 @SuppressLint("NotifyDataSetChanged")
 class AttractionsAdapter : RecyclerView.Adapter<AttractionsAdapter.ViewHolder>() {
 
-    internal var collection: List<Attraction> by Delegates.observable(emptyList()) { _, _, _ ->
+    internal var collection: List<com.tangerine.core.model.Attraction> by Delegates.observable(emptyList()) { _, _, _ ->
         notifyDataSetChanged()
     }
 

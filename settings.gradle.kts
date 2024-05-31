@@ -12,6 +12,11 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+rootProject.name = "taipeitour"
 
 rootProject.name = "TaipeiTour"
 include(":app")
+include(":core:model")
+include(":core:source")
+include(":core:api")
+include(":core:utils")

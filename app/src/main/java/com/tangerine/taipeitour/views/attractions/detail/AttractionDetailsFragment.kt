@@ -1,17 +1,15 @@
 package com.tangerine.taipeitour.views.attractions.detail
 
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.tangerine.core.ultis.fromHtml
+import com.tangerine.core.ultis.setOnSingleClickListener
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionDetailsBinding
-import com.tangerine.taipeitour.models.AnimType
-import com.tangerine.taipeitour.utils.fromHtml
-import com.tangerine.taipeitour.utils.setOnSingleClickListener
 import com.tangerine.taipeitour.views.base.BaseFragment
 import com.tangerine.taipeitour.views.common.WebviewFragment
 import com.tangerine.taipeitour.views.main.MainActivityViewModel
@@ -70,7 +68,7 @@ class AttractionDetailsFragment : BaseFragment<FragmentAttractionDetailsBinding>
                 it.text = url.fromHtml()
 
                 it.setOnSingleClickListener {
-                    goTo(WebviewFragment.getInstance(url), AnimType.SLIDE_RIGHT)
+                    goTo(WebviewFragment.getInstance(url), com.tangerine.core.model.AnimType.SLIDE_RIGHT)
                 }
             }
         }

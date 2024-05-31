@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.color.MaterialColors
-import com.tangerine.taipeitour.views.attractions.detail.AttractionDetailsFragment
-import com.tangerine.taipeitour.R
+import com.tangerine.core.source.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionsBinding
-import com.tangerine.taipeitour.models.AnimType
+import com.tangerine.taipeitour.views.attractions.detail.AttractionDetailsFragment
 import com.tangerine.taipeitour.views.base.BaseFragment
 import com.tangerine.taipeitour.views.main.MainActivityViewModel
 import org.koin.android.ext.android.inject
@@ -41,7 +40,7 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
         //Recycler view attractions
         binding.rvAttractions.adapter = attractionsAdapter
         attractionsAdapter.clickListener = {
-            goTo(AttractionDetailsFragment.getInstance(it), AnimType.FADE)
+            goTo(AttractionDetailsFragment.getInstance(it), com.tangerine.core.model.AnimType.FADE)
         }
 
         //Toolbar
@@ -52,7 +51,7 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
             it.overflowIcon =
                 ContextCompat.getDrawable(
                     activity?.applicationContext!!,
-                    R.drawable.ic_translate_12sdp
+                    com.tangerine.taipeitour.R.drawable.ic_translate_12sdp
                 )
             it.setBackgroundColor(
                 MaterialColors.getColor(

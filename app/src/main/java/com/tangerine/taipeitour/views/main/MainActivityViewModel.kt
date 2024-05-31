@@ -2,12 +2,10 @@ package com.tangerine.taipeitour.views.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.RecyclerView
-import com.tangerine.taipeitour.api.attractions.AttractionsRepo
-import com.tangerine.taipeitour.api.base.BaseRepo
-import com.tangerine.taipeitour.models.Attraction
-import com.tangerine.taipeitour.models.AttractionsResp
-import com.tangerine.taipeitour.models.Language
+import com.tangerine.core.api.attractions.AttractionsRepo
+import com.tangerine.core.model.Attraction
+import com.tangerine.core.model.AttractionsResp
+import com.tangerine.core.model.Language
 import com.tangerine.taipeitour.views.base.BaseViewModel
 
 class MainActivityViewModel(private val attractionsRepo: AttractionsRepo) : BaseViewModel() {
@@ -16,7 +14,8 @@ class MainActivityViewModel(private val attractionsRepo: AttractionsRepo) : Base
     private val _attractions: MutableLiveData<List<Attraction>> = MutableLiveData()
     val attractions: LiveData<List<Attraction>> = _attractions
 
-    private val _currentLang: MutableLiveData<Language> = MutableLiveData(Language.TAIWAN)
+    private val _currentLang: MutableLiveData<Language> = MutableLiveData(
+        Language.TAIWAN)
     val currentLang: LiveData<Language> = _currentLang
 
     fun getAttractions(lang: String?, goNextPage: Boolean) {
@@ -26,7 +25,7 @@ class MainActivityViewModel(private val attractionsRepo: AttractionsRepo) : Base
         attractionsRepo.getAttractions(
             lang = lang,
             page = newPage,
-            object : BaseRepo.ApiResponse<AttractionsResp> {
+            object : com.tangerine.core.api.base.BaseRepo.ApiResponse<AttractionsResp> {
                 override fun onSuccess(result: AttractionsResp) {
                     result.data?.let {
                         _attractions.value = it

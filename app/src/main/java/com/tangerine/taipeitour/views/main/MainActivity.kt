@@ -10,7 +10,6 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.LifecycleOwner
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.ActivityMainBinding
-import com.tangerine.taipeitour.models.Language
 import com.tangerine.taipeitour.views.attractions.AttractionsFragment
 import com.tangerine.taipeitour.views.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,13 +33,13 @@ class MainActivity : BaseActivity() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.menu_main, menu)
-                Language.values().forEachIndexed { i, e ->
+                com.tangerine.core.model.Language.values().forEachIndexed { i, e ->
                     menu.add(Menu.NONE, i, Menu.NONE, getString(e.title))
                 }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                vModel.updateNewLang(Language.getLanguage(menuItem.itemId))
+                vModel.updateNewLang(com.tangerine.core.model.Language.getLanguage(menuItem.itemId))
                 return true
             }
         })
