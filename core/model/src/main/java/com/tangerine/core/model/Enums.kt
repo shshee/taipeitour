@@ -13,7 +13,8 @@ enum class Language(val code: String, val title: Int, val appName: String) {
     VIETNAMESE("vi", R.string.vietnamese,"Tour Đài Loan");
 
     companion object {
-        fun getLanguage(ordinal: Int) = Language.values().firstOrNull { it.ordinal == ordinal } ?: ENGLISH
+        fun getLanguageFromOrdinal(ordinal: Int) = Language.values().firstOrNull { it.ordinal == ordinal } ?: ENGLISH
+        fun getLanguageFromCode(code: String) = Language.values().firstOrNull { it.code == code } ?: ENGLISH
     }
 }
 

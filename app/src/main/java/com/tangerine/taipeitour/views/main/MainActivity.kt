@@ -5,18 +5,17 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.MenuProvider
-import androidx.lifecycle.LifecycleOwner
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.ActivityMainBinding
 import com.tangerine.taipeitour.views.attractions.AttractionsFragment
+import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
 import com.tangerine.taipeitour.views.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : BaseActivity() {
-    private val vModel: MainActivityViewModel by viewModel()
+    private val vModel: AttractionsViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +25,6 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         //setUpViews()
-        setUpObserves()
         setRootFragment(AttractionsFragment(), R.id.fragment_container_attraction)
 
         addMenuProvider(object : MenuProvider {
@@ -39,18 +37,10 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                vModel.updateNewLang(com.tangerine.core.model.Language.getLanguage(menuItem.itemId))
+                vModel.updateNewLang(com.tangerine.core.model.Language.getLanguageFromOrdinal(menuItem.itemId))
                 return true
             }
         })
-    }
-
-    private fun setUpObserves() {
-        //On api failed
-        vModel.failure.observe(this as LifecycleOwner) {
-            showLoading(false)
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        }
     }
 
     override fun showLoading(isShow: Boolean) {

@@ -8,6 +8,10 @@ android {
     namespace = "com.tangerine.core.model"
     compileSdk = libs.versions.sdk.target.get().toInt()
 
+    defaultConfig {
+        minSdk = libs.versions.sdk.min.get().toInt()
+    }
+
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

@@ -1,12 +1,15 @@
 package com.tangerine.core.ultis
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.SystemClock
 import android.text.Html
+import android.text.Spanned
 import android.view.View
 
+@SuppressLint("MissingPermission")
 fun Context.isNetworkAvailable(): Boolean {
     val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val network = connectivityManager.activeNetwork ?: return false
@@ -21,7 +24,7 @@ fun Context.isNetworkAvailable(): Boolean {
     }
 }
 
-fun String.fromHtml() = Html.fromHtml(this, Html.FROM_HTML_MODE_COMPACT)
+fun String.fromHtml(): Spanned = Html.fromHtml(this, Html.FROM_HTML_MODE_COMPACT)
 
 class OnSingleClickListener(
     private val timeDisableInMillisecond: Int,
