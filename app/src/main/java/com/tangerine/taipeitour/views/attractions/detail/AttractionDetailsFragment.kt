@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.tangerine.core.ultis.fromHtml
 import com.tangerine.core.ultis.setOnSingleClickListener
+import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionDetailsBinding
 import com.tangerine.taipeitour.views.base.BaseFragment
 import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
+import com.tangerine.taipeitour.views.common.WebviewFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 /**
@@ -48,25 +52,25 @@ class AttractionDetailsFragment : BaseFragment<FragmentAttractionDetailsBinding>
     private fun onSpillData() {
         val index = arguments?.getInt(ATTRACTION_INDEX) ?: return
 
-//        aVModel.attractions.value?.get(index)?.run {
-//            binding.textViewTitle.text = name.fromHtml()
-//            context?.let {
-//                Glide.with(it).load(images.firstOrNull()?.src ?: R.mipmap.ic_launcher)
-//                    .into(binding.imageViewAttractionFull)
-//            }
-//
-//            binding.toolbarHeader.textViewPageTitle.text = name.fromHtml()
-//            binding.textViewLocation.text = address.fromHtml()
-//
-//            binding.textViewDescription.text = introduction.fromHtml()
-//
-//            binding.textViewLink.let {
-//                it.text = url.fromHtml()
-//
-//                it.setOnSingleClickListener {
-//                    goTo(WebviewFragment.getInstance(url), com.tangerine.core.model.AnimType.SLIDE_RIGHT)
-//                }
-//            }
-//        }
+        aVModel.attractionUiState.value.data.attractionsList[index].run {
+            binding.textViewTitle.text = name.fromHtml()
+            context?.let {
+                Glide.with(it).load(images.firstOrNull()?.src ?: R.mipmap.ic_launcher)
+                    .into(binding.imageViewAttractionFull)
+            }
+
+            binding.toolbarHeader.textViewPageTitle.text = name.fromHtml()
+            binding.textViewLocation.text = address.fromHtml()
+
+            binding.textViewDescription.text = introduction.fromHtml()
+
+            binding.textViewLink.let {
+                it.text = url.fromHtml()
+
+                it.setOnSingleClickListener {
+                    goTo(WebviewFragment.getInstance(url), com.tangerine.core.model.AnimType.SLIDE_RIGHT)
+                }
+            }
+        }
     }
 }
