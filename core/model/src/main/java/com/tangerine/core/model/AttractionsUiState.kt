@@ -1,22 +1,45 @@
 package com.tangerine.core.model
 
-sealed interface AttractionsUiState : BaseUiState {
-    val savedValue: AttractionsData?
-        get() {
-            return when (this) {
-                is GotAttractions -> this.data
-                else -> null //TODO applying finding cache
-            }
+class AttractionsUiState(var state: UiState, var data: AttractionsData = AttractionsData()) {
+    fun updateAttractions(
+        newPage: Int,
+        newLang: String,
+        attractions: MutableList<Attraction>
+    ): AttractionsUiState {
+        val isOnSamePage = newPage == data.currentPage
+        val isOnDiffLang = newLang != data.currentLang
+
+        val newData = if (isOnDiffLang || isOnSamePage) attractions else data.attractionsList.also {
+            it.addAll(attractions)
         }
 
-    object Loading : AttractionsUiState
-    data class GotAttractions(val data: AttractionsData) : AttractionsUiState
+        return generateNewState(
+            UiState.SUCCESS, AttractionsData(
+                currentPage = newPage,
+                currentLang = newLang,
+                attractionsList = newData
+            )
+        )
+    }
 
-    data class Failure(val throwable: Throwable) : AttractionsUiState
+    fun updateLoading() = generateNewState(UiState.LOADING)
+
+    fun updateError(ex: Throwable) = generateNewState(UiState.ERROR, data.apply {
+        latestError = ex
+    })
+
+    private fun generateNewState(
+        newState: UiState,
+        newData: AttractionsData? = null,
+    ) = AttractionsUiState(
+        state = newState,
+        data = newData ?: this.data
+    )
 }
 
 data class AttractionsData(
+    var latestError: Throwable? = null,
     var currentPage: Int = 1,
     var currentLang: String = Language.TAIWAN.code,
-    var attractionsList: List<Attraction> = mutableListOf(),
+    var attractionsList: MutableList<Attraction> = mutableListOf(),
 )

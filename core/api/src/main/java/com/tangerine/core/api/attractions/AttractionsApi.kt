@@ -13,6 +13,7 @@ internal interface AttractionsApi {
         private const val ATTRACTIONS_ALL = "{$LANG}/Attractions/All"
     }
 
+    //TODO remove call here
     @Headers("Accept: application/json")
     @GET(ATTRACTIONS_ALL)
     fun getAttractions(@Path(LANG) lang: String, @Query("page") page: Int?=null): Call<AttractionsResp>

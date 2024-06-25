@@ -7,6 +7,7 @@ import com.tangerine.core.model.AttractionsData
 import com.tangerine.core.model.AttractionsResp
 import com.tangerine.core.model.AttractionsUiState
 import com.tangerine.core.model.Language
+import com.tangerine.core.model.UiState
 import com.tangerine.taipeitour.views.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class AttractionsViewModel(private val attractionsRepo: AttractionsRepo) : BaseViewModel() {
     private val _attractionsUiState: MutableStateFlow<AttractionsUiState> =
-        MutableStateFlow(AttractionsUiState.Loading)
+        MutableStateFlow(AttractionsUiState(UiState.LOADING))
     val attractionUiState: StateFlow<AttractionsUiState> = _attractionsUiState
 
     init {
@@ -22,29 +23,29 @@ class AttractionsViewModel(private val attractionsRepo: AttractionsRepo) : BaseV
     }
 
     fun getAttractions(lang: String? = null, goNextPage: Boolean = false) {
-        val data = attractionUiState.value.savedValue ?: AttractionsData()
+        val data = attractionUiState.value.data
 
         val newPage = 1 //data.currentPage + (if (goNextPage) 1 else 0)
         val newLang = lang ?: data.currentLang
 
         viewModelScope.launch {
-            //TODO save last list when paging is needed
-            _attractionsUiState.value = AttractionsUiState.Loading
+            _attractionsUiState.let {
+                //TODO save last list when paging is needed
+                it.value = it.value.updateLoading()
 
-            attractionsRepo.getAttractions(lang = newLang, page = newPage).collect {
-                _attractionsUiState.value = when (it) {
-                    is BaseRepo.ApiReponse.Success<*> -> {
-                        AttractionsUiState.GotAttractions(
-                            AttractionsData(
-                                currentPage = newPage,
-                                currentLang = newLang,
-                                attractionsList = (it.response as AttractionsResp).data
+                attractionsRepo.getAttractions(lang = newLang, page = newPage).collect { rs ->
+                    it.value = when (rs) {
+                        is BaseRepo.ApiResponse.Success<*> -> {
+                            it.value.updateAttractions(
+                                newPage,
+                                newLang,
+                                (rs.response as AttractionsResp).data?.toMutableList()
                                     ?: mutableListOf()
                             )
-                        )
-                    }
+                        }
 
-                    is BaseRepo.ApiReponse.Failure -> AttractionsUiState.Failure(it.throwable)
+                        is BaseRepo.ApiResponse.Failure -> it.value.updateError(rs.throwable)
+                    }
                 }
             }
         }

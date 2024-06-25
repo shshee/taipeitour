@@ -8,18 +8,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.color.MaterialColors
 import com.tangerine.core.model.AttractionsUiState
-import com.tangerine.core.model.BaseUiState
 import com.tangerine.core.model.Language
+import com.tangerine.core.model.UiState
 import com.tangerine.core.source.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionsBinding
 import com.tangerine.taipeitour.views.attractions.detail.AttractionDetailsFragment
 import com.tangerine.taipeitour.views.base.BaseFragment
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -78,23 +76,32 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
     private fun putObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                aVModel.attractionUiState.collect {
+                aVModel.attractionUiState.collect { uiState ->
                     showLoading(false)
 
-                    when (it) {
-                        is AttractionsUiState.GotAttractions -> {
-                            attractionsAdapter.collection = it.data.attractionsList
-                            binding.toolbar.title =
-                                Language.getLanguageFromCode(it.data.currentLang).appName
+                    uiState.data.let {
+                        when (uiState.state) {
+                            UiState.SUCCESS -> {
+                                attractionsAdapter.collection = it.attractionsList
+
+                                //Scroll back to start in new lang was updated
+                                if (it.currentPage == 1) binding.rvAttractions.smoothScrollToPosition(
+                                    0
+                                )
+
+                                //Update title according to selecting lang
+                                binding.toolbar.title =
+                                    Language.getLanguageFromCode(it.currentLang).appName
+                            }
+
+                            UiState.ERROR -> Toast.makeText(
+                                requireContext(),
+                                it.latestError?.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            UiState.LOADING -> showLoading(true)
                         }
-
-                        is AttractionsUiState.Failure -> Toast.makeText(
-                            requireContext(),
-                            it.throwable.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        is AttractionsUiState.Loading -> showLoading(true)
                     }
                 }
             }

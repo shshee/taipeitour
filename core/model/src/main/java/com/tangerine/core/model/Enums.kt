@@ -19,3 +19,5 @@ enum class Language(val code: String, val title: Int, val appName: String) {
 }
 
 enum class AnimType { SLIDE_LEFT, SLIDE_RIGHT, SLIDE_BOTTOM, SLIDE_TOP, FADE }
+
+enum class UiState { LOADING, SUCCESS, ERROR }
