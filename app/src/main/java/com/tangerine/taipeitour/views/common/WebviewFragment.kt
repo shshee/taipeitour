@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.tangerine.core.ultis.setOnSingleClickListener
 import com.tangerine.taipeitour.databinding.FragmentWebviewBinding
 import com.tangerine.taipeitour.views.base.BaseFragment
@@ -17,10 +20,8 @@ class WebviewFragment : BaseFragment<FragmentWebviewBinding>() {
     companion object {
         private val URL = "URL"
 
-        fun getInstance(url: String) = WebviewFragment().apply {
-            arguments = Bundle().apply {
-                putString(URL, url)
-            }
+        fun setArguments(url: String) = Bundle().apply {
+            putString(URL, url)
         }
     }
 
@@ -37,10 +38,13 @@ class WebviewFragment : BaseFragment<FragmentWebviewBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbarHeader.toolbarBack.setOnSingleClickListener {
-            goOneBack()
+            showLoading(false)
+            findNavController().popBackStack()
         }
 
         arguments?.getString(URL)?.let {
+            showLoading(true)
+
             binding.webviewAttraction.settings.run {
                 javaScriptEnabled = true
                 domStorageEnabled = true
@@ -54,6 +58,23 @@ class WebviewFragment : BaseFragment<FragmentWebviewBinding>() {
                 ): Boolean {
                     request?.url?.toString()?.let { it1 -> view?.loadUrl(it1) }
                     return super.shouldOverrideUrlLoading(view, request)
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    showLoading(false)
+                }
+
+                override fun onReceivedError(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                    error: WebResourceError?
+                ) {
+                    Toast.makeText(
+                        activity,
+                        "Your Internet Connection May not be active Or " + error?.description,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 

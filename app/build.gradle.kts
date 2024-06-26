@@ -53,6 +53,8 @@ dependencies {
 
     implementation(libs.koin)
     implementation(libs.glide.core)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     annotationProcessor(libs.glide.complier)
 
     testImplementation(libs.test.junit)

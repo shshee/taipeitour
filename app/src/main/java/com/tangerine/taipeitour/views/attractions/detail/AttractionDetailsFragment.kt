@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.tangerine.core.ultis.fromHtml
 import com.tangerine.core.ultis.setOnSingleClickListener
@@ -22,10 +23,8 @@ class AttractionDetailsFragment : BaseFragment<FragmentAttractionDetailsBinding>
     companion object {
         private val ATTRACTION_INDEX = "ATTRACTION_INDEX"
 
-        fun getInstance(index: Int) = AttractionDetailsFragment().apply {
-            arguments = Bundle().apply {
-                putInt(ATTRACTION_INDEX, index)
-            }
+        fun setArguments(index: Int) = Bundle().apply {
+            putInt(ATTRACTION_INDEX, index)
         }
     }
 
@@ -43,7 +42,7 @@ class AttractionDetailsFragment : BaseFragment<FragmentAttractionDetailsBinding>
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbarHeader.btnBack.setOnSingleClickListener {
-            goOneBack()
+            findNavController().popBackStack()
         }
 
         onSpillData()
@@ -68,7 +67,10 @@ class AttractionDetailsFragment : BaseFragment<FragmentAttractionDetailsBinding>
                 it.text = url.fromHtml()
 
                 it.setOnSingleClickListener {
-                    goTo(WebviewFragment.getInstance(url), com.tangerine.core.model.AnimType.SLIDE_RIGHT)
+                    findNavController().navigate(
+                        R.id.action_attractionDetailsFragment_to_webviewFragment,
+                        WebviewFragment.setArguments(url)
+                    )
                 }
             }
         }

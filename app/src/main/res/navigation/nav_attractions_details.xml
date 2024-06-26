@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_attractions_details"
+    app:startDestination="@id/attractionsFragment">
+    <fragment
+        android:id="@+id/attractionsFragment"
+        android:name="com.tangerine.taipeitour.views.attractions.AttractionsFragment"
+        android:label="fragment_attractions"
+        tools:layout="@layout/fragment_attractions" >
+        <action
+            android:id="@+id/action_attractionsFragment_to_attractionDetailsFragment"
+            app:destination="@id/attractionDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/attractionDetailsFragment"
+        android:name="com.tangerine.taipeitour.views.attractions.detail.AttractionDetailsFragment"
+        android:label="AttractionDetailsFragment"
+        tools:layout="@layout/fragment_attraction_details">
+        <action
+            android:id="@+id/action_attractionDetailsFragment_to_webviewFragment"
+            app:destination="@id/webviewFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/webviewFragment"
+        android:name="com.tangerine.taipeitour.views.common.WebviewFragment"
+        android:label="WebviewFragment"
+        tools:layout="@layout/fragment_webview">
+    </fragment>
+</navigation>

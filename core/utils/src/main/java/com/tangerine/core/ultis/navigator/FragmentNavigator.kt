@@ -8,12 +8,6 @@ import com.tangerine.core.model.AnimType
 import com.tangerine.core.source.R
 import java.util.*
 
-/**
- * Created by thongph on 11.28.2017
- *
- *
- * Last modified on 11.28.2017
- */
 class FragmentNavigator(
     private val mFragmentManager: FragmentManager,
     @field:IdRes @param:IdRes private val mDefaultContainer: Int

@@ -12,12 +12,18 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
         val newData = if (isOnDiffLang || isOnSamePage) attractions else data.attractionsList.also {
             it.addAll(attractions)
         }
+        val anyUpdates = when {
+            isOnDiffLang -> AttractionsUpdate.NEW_LANG
+            !isOnSamePage -> AttractionsUpdate.NEW_PAGE
+            else -> AttractionsUpdate.NOTHING
+        }
 
         return generateNewState(
             UiState.SUCCESS, AttractionsData(
                 currentPage = newPage,
                 currentLang = newLang,
-                attractionsList = newData
+                attractionsList = newData,
+                updateType = anyUpdates.ordinal
             )
         )
     }
@@ -27,6 +33,11 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
     fun updateError(ex: Throwable) = generateNewState(UiState.ERROR, data.apply {
         latestError = ex
     })
+
+    fun handled() {
+        data.latestError = null
+        data.updateType = AttractionsUpdate.NOTHING.ordinal
+    }
 
     private fun generateNewState(
         newState: UiState,
@@ -38,8 +49,9 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
 }
 
 data class AttractionsData(
-    var latestError: Throwable? = null,
     var currentPage: Int = 1,
     var currentLang: String = Language.TAIWAN.code,
     var attractionsList: MutableList<Attraction> = mutableListOf(),
+    var latestError: Throwable? = null,
+    var updateType: Int = AttractionsUpdate.NOTHING.ordinal,
 )

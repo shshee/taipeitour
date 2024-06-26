@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/FullWidthHeight">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_attraction"
+        android:id="@+id/nav_attractions_to_details"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_attractions"/>
+        app:navGraph="@navigation/nav_attractions_details" />
 
     <ProgressBar
         android:id="@+id/progressBar_cyclic"

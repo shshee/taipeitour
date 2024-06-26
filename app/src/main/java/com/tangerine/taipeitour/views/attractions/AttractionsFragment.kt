@@ -10,8 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
 import com.tangerine.core.model.AttractionsUiState
+import com.tangerine.core.model.AttractionsUpdate
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.core.source.R
@@ -46,7 +48,10 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
         //Recycler view attractions
         binding.rvAttractions.adapter = attractionsAdapter
         attractionsAdapter.clickListener = {
-            goTo(AttractionDetailsFragment.getInstance(it), com.tangerine.core.model.AnimType.FADE)
+            findNavController().navigate(
+                com.tangerine.taipeitour.R.id.action_attractionsFragment_to_attractionDetailsFragment,
+                AttractionDetailsFragment.setArguments(it)
+            )
         }
 
         //Toolbar
@@ -85,9 +90,13 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
                                 attractionsAdapter.collection = it.attractionsList
 
                                 //Scroll back to start in new lang was updated
-                                if (it.currentPage == 1) binding.rvAttractions.smoothScrollToPosition(
-                                    0
-                                )
+                                when (it.updateType) {
+                                    AttractionsUpdate.NEW_LANG.ordinal -> binding.rvAttractions.smoothScrollToPosition(
+                                        0
+                                    )
+
+                                    else -> {}
+                                }
 
                                 //Update title according to selecting lang
                                 binding.toolbar.title =
@@ -103,6 +112,9 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
                             UiState.LOADING -> showLoading(true)
                         }
                     }
+
+                    //Clear caches
+                    uiState.handled()
                 }
             }
         }
