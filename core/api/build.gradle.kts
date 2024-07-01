@@ -27,4 +27,8 @@ dependencies {
     implementation(project(mapOf("path" to ":core:source")))
     implementation(libs.koin)
     implementation(libs.bundles.api)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.coroutines)
 }
