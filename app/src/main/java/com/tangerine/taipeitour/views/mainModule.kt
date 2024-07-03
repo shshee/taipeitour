@@ -2,12 +2,13 @@ package com.tangerine.taipeitour.views
 
 import com.tangerine.taipeitour.views.attractions.AttractionsAdapter
 import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import kotlinx.coroutines.Dispatchers
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val mainModule = module {
-    viewModelOf(::AttractionsViewModel)
+    viewModel { AttractionsViewModel(dispatcher = Dispatchers.IO,get()) }
     factoryOf(::AttractionsAdapter)
 }
 

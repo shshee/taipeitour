@@ -50,14 +50,17 @@ dependencies {
 
     implementation(libs.bundles.main)
     implementation(libs.bundles.size)
+    implementation(libs.bundles.koin)
 
-    implementation(libs.koin)
     implementation(libs.glide.core)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     annotationProcessor(libs.glide.complier)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.turbine)
+    testImplementation(libs.test.coroutines)
     androidTestImplementation(libs.android.test.junit)
     androidTestImplementation(libs.android.test.espresso)
 }

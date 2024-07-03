@@ -25,7 +25,7 @@ dependencies {
     implementation(project(mapOf("path" to ":core:model")))
     implementation(project(mapOf("path" to ":core:utils")))
     implementation(project(mapOf("path" to ":core:source")))
-    implementation(libs.koin)
+    implementation(libs.bundles.koin)
     implementation(libs.bundles.api)
 
     testImplementation(libs.test.junit)

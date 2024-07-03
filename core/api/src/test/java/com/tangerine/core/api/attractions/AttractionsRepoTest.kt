@@ -8,7 +8,9 @@ import io.mockk.junit4.MockKRule
 import io.mockk.spyk
 import junit.framework.Assert.assertTrue
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -27,20 +29,24 @@ class AttractionsRepoTest {
 
     private lateinit var repo: AttractionsRepo
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         every { service.getAttractions(any(), any()) } returns generateResponse(true)
         every { service.getAttractions("", any()) } returns generateResponse(false)
 
-        repo = AttractionsRepo(service)
+        repo = AttractionsRepo(UnconfinedTestDispatcher(),service)
     }
 
     @Test
-    fun `responses will receive when we call get attractions`() = runTest {
+    fun `receive responses when get attractions`() = runTest {
         val caseSuccess = repo.getAttractions("en", 1).first()
-        val caseFailure = repo.getAttractions("", null).first()
+        assertTrue("Response: $caseSuccess", caseSuccess is BaseRepo.ApiResponse.Success<*> && caseSuccess.response != null)
+    }
 
-        assertTrue("Response: $caseSuccess", caseSuccess is BaseRepo.ApiResponse.Success<*>)
+    @Test
+    fun `throw errors when get attractions`() = runTest {
+        val caseFailure = repo.getAttractions("", null).first()
         assertEquals(true, caseFailure is BaseRepo.ApiResponse.Failure)
     }
 

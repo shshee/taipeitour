@@ -9,11 +9,13 @@ import com.tangerine.core.model.AttractionsUiState
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.taipeitour.views.base.BaseViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AttractionsViewModel(private val attractionsRepo: AttractionsRepo) : BaseViewModel() {
+class AttractionsViewModel(private val dispatcher: CoroutineDispatcher, private val attractionsRepo: AttractionsRepo) : BaseViewModel() {
     private val _attractionsUiState: MutableStateFlow<AttractionsUiState> =
         MutableStateFlow(AttractionsUiState(UiState.LOADING))
     val attractionUiState: StateFlow<AttractionsUiState> = _attractionsUiState
@@ -28,9 +30,8 @@ class AttractionsViewModel(private val attractionsRepo: AttractionsRepo) : BaseV
         val newPage = 1 //data.currentPage + (if (goNextPage) 1 else 0)
         val newLang = lang ?: data.currentLang
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             _attractionsUiState.let {
-                //TODO save last list when paging is needed
                 it.value = it.value.updateLoading()
 
                 attractionsRepo.getAttractions(lang = newLang, page = newPage).collect { rs ->

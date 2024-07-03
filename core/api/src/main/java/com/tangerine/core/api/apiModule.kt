@@ -2,6 +2,7 @@ package com.tangerine.core.api
 
 import com.tangerine.core.api.attractions.AttractionsRepo
 import com.tangerine.core.api.attractions.AttractionsService
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.factoryOf
@@ -14,7 +15,7 @@ val apiModule = module {
     singleOf(::retrofit)
 
     factoryOf(::AttractionsService)
-    factoryOf(::AttractionsRepo)
+    factory { AttractionsRepo(dispatcher = Dispatchers.IO, get()) }
 }
 
 private fun retrofit(): Retrofit {
