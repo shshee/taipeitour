@@ -11,8 +11,8 @@ android {
         applicationId = "com.tangerine.taipeitour"
         minSdk = libs.versions.sdk.min.get().toInt()
         targetSdk = libs.versions.sdk.target.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.code.get().toInt()
+        versionName = libs.versions.name.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,7 +23,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = libs.versions.jvm.target.get()
     }
 
     buildTypes {
@@ -36,7 +36,12 @@ android {
         }
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
+
     buildFeatures {
+        compose = true
         viewBinding = true
     }
 }
@@ -51,6 +56,10 @@ dependencies {
     implementation(libs.bundles.main)
     implementation(libs.bundles.size)
     implementation(libs.bundles.koin)
+
+    //Compose
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.glide.core)
     implementation(libs.navigation.fragment)
