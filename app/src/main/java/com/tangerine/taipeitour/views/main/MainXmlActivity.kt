@@ -8,13 +8,12 @@ import android.view.View
 import androidx.core.view.MenuProvider
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.ActivityMainBinding
-import com.tangerine.taipeitour.views.attractions.AttractionsFragment
 import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
 import com.tangerine.taipeitour.views.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : BaseActivity() {
+class MainXmlActivity : BaseActivity() {
     private val vModel: AttractionsViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
 

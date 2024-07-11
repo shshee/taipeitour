@@ -2,11 +2,8 @@ package com.tangerine.taipeitour.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -23,25 +20,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.tangerine.core.model.Language
 import com.tangerine.taipeitour.R
 
 @Composable
 fun HomeToolbar(title: String, updateLanguage: (Language) -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .height(dimensionResource(id = com.tangerine.core.source.R.dimen.toolbar_height))
+            .height(dimensionResource(id = com.tangerine.core.source.R.dimen.toolbar_height)),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            text = title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(
-                horizontal = myPadding()
-            ), color = MaterialTheme.colorScheme.onSecondary
+            text = title,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSecondary
         )
-        Spacer(modifier = Modifier.weight(1f))
-        Languages(updateLanguage = updateLanguage)
+        Languages(updateLanguage = updateLanguage, modifier = Modifier.align(Alignment.CenterEnd))
     }
 }
 
@@ -78,5 +77,5 @@ fun Languages(updateLanguage: (Language) -> Unit, modifier: Modifier = Modifier)
 @Preview
 @Composable
 fun MyPreview() {
-    HomeToolbar(title = "Test",{})
+    HomeToolbar(title = "Test", {})
 }

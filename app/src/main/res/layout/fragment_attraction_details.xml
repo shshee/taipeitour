@@ -29,7 +29,7 @@
             <LinearLayout
                 style="@style/FullWidthWrapHeight"
                 android:layout_below="@id/image_view_attraction_full"
-                android:layout_margin="@dimen/standard_padding"
+                android:layout_margin="@dimen/standard_xml_padding"
                 android:orientation="vertical">
 
                 <TextView
@@ -45,13 +45,13 @@
                 <TextView
                     android:id="@+id/text_view_description"
                     style="@style/TextAppearance.H4"
-                    android:layout_marginTop="@dimen/standard_padding"
+                    android:layout_marginTop="@dimen/standard_xml_padding"
                     tools:text="@string/app_name" />
 
                 <TextView
                     android:id="@+id/text_view_link"
                     style="@style/TextAppearance.H4"
-                    android:paddingVertical="@dimen/standard_padding"
+                    android:paddingVertical="@dimen/standard_xml_padding"
                     android:autoLink="web"
                     android:linksClickable="false"
                     android:textStyle="bold"

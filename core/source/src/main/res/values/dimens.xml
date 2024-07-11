@@ -8,6 +8,7 @@
     <dimen name="H5">@dimen/_6ssp</dimen> <!-- 20px -->
     <dimen name="H6">@dimen/_5ssp</dimen>
 
-    <dimen name="standard_padding">@dimen/_10sdp</dimen>
+    <dimen name="standard_xml_padding">@dimen/_10sdp</dimen>
+    <dimen name="standard_compose_padding">12dp</dimen>
     <dimen name="toolbar_height">@dimen/_36sdp</dimen>
 </resources>

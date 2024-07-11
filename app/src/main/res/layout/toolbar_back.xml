@@ -13,7 +13,7 @@
         android:id="@+id/btn_back"
         android:layout_width="@dimen/toolbar_height"
         android:layout_height="@dimen/toolbar_height"
-        android:padding="@dimen/standard_padding"
+        android:padding="@dimen/standard_xml_padding"
         android:src="@drawable/ic_back_12sdp" />
 
     <TextView
@@ -21,6 +21,6 @@
         style="@style/TextAppearance.Bold"
         android:textColor="@color/white"
         android:textSize="@dimen/H2"
-        android:layout_marginEnd="@dimen/standard_padding"
+        android:layout_marginEnd="@dimen/standard_xml_padding"
         tools:text="@string/app_name" />
 </LinearLayout>

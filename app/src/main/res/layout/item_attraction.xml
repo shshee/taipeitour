@@ -8,14 +8,14 @@
     <RelativeLayout
         style="@style/FullWidthWrapHeight"
         android:layout_height="@dimen/_60sdp"
-        android:layout_margin="@dimen/standard_padding">
+        android:layout_margin="@dimen/standard_xml_padding">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/holder_img_attraction"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/standard_padding"
+            android:layout_marginEnd="@dimen/standard_xml_padding"
             android:elevation="12dp"
             app:cardCornerRadius="20dp">
 
