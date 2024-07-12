@@ -1,4 +1,4 @@
-package com.tangerine.taipeitour.compose
+package com.tangerine.taipeitour.compose.attractions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,18 +36,21 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.tangerine.core.model.Attraction
+import com.tangerine.taipeitour.compose.others.myPadding
 
 @Composable
-fun myPadding() = dimensionResource(id = com.tangerine.core.source.R.dimen.standard_compose_padding)
-
-@Composable
-fun AttractionElement(attraction: Attraction, modifier: Modifier = Modifier) {
+fun AttractionElement(
+    onViewDetails: (Int) -> Unit,
+    attraction: Attraction,
+    modifier: Modifier = Modifier
+) {
     val imageSize = 110.dp
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
             .fillMaxWidth()
-            .height(imageSize)
+            .height(imageSize),
+        onClick = { onViewDetails(attraction.id) }
     ) {
         Row {
             Box(modifier = Modifier.background(MaterialTheme.colorScheme.inversePrimary)) {
@@ -110,13 +112,19 @@ fun AttractionElement(attraction: Attraction, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Attractions(list: MutableList<Attraction>, paddings: Dp, modifier: Modifier = Modifier) {
+fun Attractions(
+    onViewDetails: (Int) -> Unit,
+    list: MutableList<Attraction>,
+    paddings: Dp,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(paddings),
         modifier = modifier.padding(paddings)
     ) {
         items(list) {
             AttractionElement(
+                onViewDetails = onViewDetails,
                 attraction = it
             )
         }
@@ -140,5 +148,5 @@ fun AttractionElementPreview() {
         list.add(item)
     }
 
-    Attractions(list = list, paddings = myPadding())
+    Attractions(list = list, paddings = myPadding(), onViewDetails = {})
 }

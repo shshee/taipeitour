@@ -1,4 +1,4 @@
-package com.tangerine.taipeitour.compose
+package com.tangerine.taipeitour.compose.splash
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState

@@ -8,6 +8,9 @@
     <string name="previous">Previous</string>
 
     <string name="view_more">View More</string>
+    <string name="retry">Retry</string>
+    <string name="error">Error</string>
+    <string name="something_went_wrong">Something went wrong</string>
 
     <string name="chinese_taiwan">Chinese (Taiwan)</string>
     <string name="chinese_prc">Chinese (PRC)</string>

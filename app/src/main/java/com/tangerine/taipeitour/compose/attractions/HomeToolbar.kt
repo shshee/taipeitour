@@ -1,4 +1,4 @@
-package com.tangerine.taipeitour.compose
+package com.tangerine.taipeitour.compose.attractions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

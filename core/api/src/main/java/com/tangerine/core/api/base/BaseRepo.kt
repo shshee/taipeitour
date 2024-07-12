@@ -27,7 +27,7 @@ abstract class BaseRepo(private val dispatcher: CoroutineDispatcher) {
         val response = call.clone().execute() //Make sure new call will be created
 
         when {
-            !response.isSuccessful -> throw Throwable("${response.code()}:${response.errorBody()}")
+            !response.isSuccessful -> throw Throwable("${response.code()}: ${response.errorBody()}")
             response.body() == null -> throw Throwable("Empty response !")
             else -> emit(ApiResponse.Success(response.body()) as ApiResponse)
         }

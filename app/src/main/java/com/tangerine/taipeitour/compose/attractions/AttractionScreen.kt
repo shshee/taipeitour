@@ -1,25 +1,33 @@
-package com.tangerine.taipeitour.compose
+package com.tangerine.taipeitour.compose.attractions
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.tangerine.core.model.Attraction
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
+import com.tangerine.taipeitour.compose.others.LocalSnackbarHostState
+import com.tangerine.taipeitour.compose.others.myPadding
 import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AttractionScreen(viewModel: AttractionsViewModel = koinViewModel()) {
+fun AttractionScreen(
+    onViewDetails: (Int) -> Unit,
+    viewModel: AttractionsViewModel = koinViewModel()
+) {
     val uiState by viewModel.attractionUiState.collectAsState()
 
     Column(
@@ -37,19 +45,43 @@ fun AttractionScreen(viewModel: AttractionsViewModel = koinViewModel()) {
                 .weight(1f),
             contentAlignment = Alignment.Center
         ) {
+            Attractions(
+                onViewDetails = onViewDetails,
+                list = uiState.data.attractionsList,
+                paddings = myPadding()
+            )
+
             when (uiState.state) {
                 UiState.LOADING -> {
                     CircularProgressIndicator()
                 }
 
-                UiState.SUCCESS -> {
-                    Attractions(
-                        list = uiState.data.attractionsList, paddings = myPadding()
-                    )
+                UiState.ERROR -> {
+                    val snackbarHostState = LocalSnackbarHostState.current
+                    val message = uiState.data.latestError?.message
+                        ?: stringResource(id = com.tangerine.core.source.R.string.something_went_wrong)
+                    val retry = stringResource(id = com.tangerine.core.source.R.string.retry)
+
+                    LaunchedEffect(Unit) {
+                        val result = snackbarHostState
+                            .showSnackbar(
+                                message = message,
+                                actionLabel = retry,
+                                duration = SnackbarDuration.Indefinite
+                            )
+
+                        when (result) {
+                            SnackbarResult.ActionPerformed -> {
+                                viewModel.getAttractions()
+                            }
+
+                            SnackbarResult.Dismissed -> {
+                            }
+                        }
+                    }
                 }
 
-                UiState.ERROR -> {
-                }
+                else -> {}
             }
         }
     }
@@ -76,6 +108,7 @@ fun AttractionScreenPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
         HomeToolbar(title = "test", {})
         Attractions(
+            onViewDetails = {},
             list = list, paddings = myPadding(), modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
