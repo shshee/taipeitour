@@ -59,6 +59,7 @@ dependencies {
 
     //Compose
     implementation(libs.bundles.compose)
+    implementation(libs.bundles.compose.extensions)
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.glide.core)

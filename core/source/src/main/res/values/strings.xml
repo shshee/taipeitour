@@ -12,6 +12,9 @@
     <string name="error">Error</string>
     <string name="something_went_wrong">Something went wrong</string>
 
+    <string name="home">Home</string>
+    <string name="bookmarks">Bookmarks</string>
+
     <string name="chinese_taiwan">Chinese (Taiwan)</string>
     <string name="chinese_prc">Chinese (PRC)</string>
     <string name="japanese">Japanese</string>

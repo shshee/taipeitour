@@ -3,7 +3,7 @@ sdk-target = "34"
 sdk-min = "27"
 code = "1"
 name = "1.0"
-jvm-target="1.8"
+jvm-target = "1.8"
 
 androidx-core-ktx = "1.9.0"
 app-compat = "1.6.1"
@@ -31,6 +31,8 @@ compose = "1.9.0"
 compose-preview = "1.6.8"
 marterial3 = "1.2.1"
 compose-navigation = "2.7.7"
+compose-icons = "1.6.8"
+compose-html = "2.0.0-beta01"
 coil = "2.6.0"
 
 
@@ -44,11 +46,14 @@ navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", 
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 
 compose-core = { module = "androidx.activity:activity-compose", version.ref = "compose" }
-compose-preview = {module = "androidx.compose.ui:ui-tooling-preview", version.ref="compose-preview" }
-compose-ui-tooling = {module = "androidx.compose.ui:ui-tooling", version.ref = "compose-preview"}
+compose-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-preview" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-preview" }
 compose-marterial3 = { module = "androidx.compose.material3:material3", version.ref = "marterial3" }
-compose-marterial3-sizes = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "marterial3" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
+
+compose-marterial3-sizes = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "marterial3" }
+compose-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-icons" }
+compose-html = { module = "de.charlex.compose.material3:material3-html-text", version.ref = "compose-html" }
 compose-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 di-koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
@@ -81,7 +86,8 @@ navigation = ["navigation-fragment", "navigation-ui"]
 api = ["retrofit", "logging-interceptor", "gson-core", "gson-converter"]
 size = ["size-sdp", "size-ssp"]
 koin = ["di-koin", "di-koin-compose", "di-koin-navigation"]
-compose = ["compose-core","compose-preview","compose-marterial3","compose-marterial3-sizes","compose-navigation", "compose-coil"]
+compose = ["compose-core", "compose-preview", "compose-marterial3", "compose-navigation"]
+compose-extensions = ["compose-html","compose-marterial3-sizes", "compose-icons", "compose-coil"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -4,13 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.tangerine.taipeitour.compose.attractions.AttractionScreen
+import com.tangerine.taipeitour.compose.attractions.AttractionsScreen
 import com.tangerine.taipeitour.compose.attractions.details.AttractionDetailsScreen
-import com.tangerine.taipeitour.compose.others.Route
+import com.tangerine.taipeitour.compose.bookmarks.BookmarksScreen
 import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -23,22 +21,32 @@ fun NavHost(
 
     NavHost(
         navController = navController,
-        startDestination = Route.attractions,
+        startDestination = bottomTabScreens.first().route,
         modifier = modifier
     ) {
-        composable(route = Route.attractions) {
-            AttractionScreen(onViewDetails = {
-                navController.navigateSingleTopTo("${Route.attractions}/$it")
-            }, viewModel = attractionsViewModel)
+        for (screen in bottomTabScreens) {
+            composable(route = screen.route) {
+                when (screen) {
+                    is AttractionsPage -> {
+                        AttractionsScreen(onViewDetails = {
+                            navController.navigateSingleTopTo(
+                                AttractionDetailsPage.generateRouteFromId(
+                                    it
+                                )
+                            )
+                        }, viewModel = attractionsViewModel)
+                    }
+
+                    is BookmarksPage -> BookmarksScreen()
+                }
+            }
         }
 
         composable(
-            route = Route.attractionDetails,
-            arguments = listOf(
-                navArgument(Route.attractionIdArg) { type = NavType.IntType }
-            ),
+            route = AttractionDetailsPage.route,
+            arguments = AttractionDetailsPage.arguments,
         ) { navBackStackEntry ->
-            val id = navBackStackEntry.arguments?.getInt(Route.attractionIdArg)
+            val id = navBackStackEntry.arguments?.getInt(AttractionDetailsPage.attractionIdArg)
             AttractionDetailsScreen(item = attractionsViewModel.attractionUiState.value.data.attractionsList.first { it.id == id })
         }
     }

@@ -37,6 +37,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.tangerine.core.model.Attraction
 import com.tangerine.taipeitour.compose.others.myPadding
+import de.charlex.compose.material3.HtmlText
 
 @Composable
 fun AttractionElement(
@@ -79,12 +80,12 @@ fun AttractionElement(
                     .fillMaxHeight()
                     .padding(horizontal = myPadding(), vertical = 5.dp)
             ) {
-                Text(
+                HtmlText(
                     text = attraction.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
+                HtmlText(
                     text = attraction.introduction,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 2,
@@ -115,17 +116,14 @@ fun AttractionElement(
 fun Attractions(
     onViewDetails: (Int) -> Unit,
     list: MutableList<Attraction>,
-    paddings: Dp,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(paddings),
-        modifier = modifier.padding(paddings)
-    ) {
+    LazyColumn(modifier = modifier.padding(myPadding(), myPadding(), myPadding(), 0.dp)) {
         items(list) {
             AttractionElement(
                 onViewDetails = onViewDetails,
-                attraction = it
+                attraction = it,
+                modifier = Modifier.padding(bottom = myPadding())
             )
         }
     }
@@ -148,5 +146,5 @@ fun AttractionElementPreview() {
         list.add(item)
     }
 
-    Attractions(list = list, paddings = myPadding(), onViewDetails = {})
+    Attractions(list = list, onViewDetails = {})
 }

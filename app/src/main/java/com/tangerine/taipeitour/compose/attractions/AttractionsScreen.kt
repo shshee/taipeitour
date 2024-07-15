@@ -24,7 +24,7 @@ import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AttractionScreen(
+fun AttractionsScreen(
     onViewDetails: (Int) -> Unit,
     viewModel: AttractionsViewModel = koinViewModel()
 ) {
@@ -47,8 +47,7 @@ fun AttractionScreen(
         ) {
             Attractions(
                 onViewDetails = onViewDetails,
-                list = uiState.data.attractionsList,
-                paddings = myPadding()
+                list = uiState.data.attractionsList
             )
 
             when (uiState.state) {
@@ -90,7 +89,7 @@ fun AttractionScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun AttractionScreenPreview() {
+fun AttractionsScreenPreview() {
     val item = Attraction(
         id = 1,
         name = "Chùa Bà Đanh",
@@ -109,7 +108,7 @@ fun AttractionScreenPreview() {
         HomeToolbar(title = "test", {})
         Attractions(
             onViewDetails = {},
-            list = list, paddings = myPadding(), modifier = Modifier
+            list = list, modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
         )
