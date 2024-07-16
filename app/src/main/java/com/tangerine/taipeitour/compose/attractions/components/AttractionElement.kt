@@ -1,7 +1,6 @@
-package com.tangerine.taipeitour.compose.attractions
+package com.tangerine.taipeitour.compose.attractions.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -51,6 +50,7 @@ fun AttractionElement(
         modifier = modifier
             .fillMaxWidth()
             .height(imageSize),
+        elevation = CardDefaults.cardElevation(2.dp),
         onClick = { onViewDetails(attraction.id) }
     ) {
         Row {
@@ -110,41 +110,4 @@ fun AttractionElement(
 
         }
     }
-}
-
-@Composable
-fun Attractions(
-    onViewDetails: (Int) -> Unit,
-    list: MutableList<Attraction>,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(modifier = modifier.padding(myPadding(), myPadding(), myPadding(), 0.dp)) {
-        items(list) {
-            AttractionElement(
-                onViewDetails = onViewDetails,
-                attraction = it,
-                modifier = Modifier.padding(bottom = myPadding())
-            )
-        }
-    }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun AttractionElementPreview() {
-    val item = Attraction(
-        id = 1,
-        name = "Chùa Bà Đanh",
-        introduction = "Nơi văng vẻ nhất việt nam",
-        address = "Hồ Chí Minh City",
-        url = "google.com",
-        images = listOf(Attraction.Image(src = "https://statics.vinwonders.com/chua-ba-danh-ha-nam-1_1629214003.jpg"))
-    )
-
-    val list = mutableListOf(item)
-    repeat(4) {
-        list.add(item)
-    }
-
-    Attractions(list = list, onViewDetails = {})
 }

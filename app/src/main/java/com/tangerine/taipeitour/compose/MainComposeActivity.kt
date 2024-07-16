@@ -3,6 +3,12 @@ package com.tangerine.taipeitour.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,12 +24,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.compose.others.LocalSnackbarHostState
 import com.tangerine.taipeitour.compose.splash.LandingScreen
 import com.tangerine.taipeitour.theme.AppTheme
@@ -45,8 +56,17 @@ fun TaipeiTourApp() {
     AppTheme {
         val navController = rememberNavController()
         val snackbarHostState = remember { SnackbarHostState() }
-        var showLandingScreen by remember { mutableStateOf(true) }
+        var showLandingScreen by rememberSaveable { mutableStateOf(true) }
         var selectingTab by rememberSaveable { mutableStateOf(bottomTabScreens.first().route) }
+
+        val currentBackStack by navController.currentBackStackEntryAsState()
+
+        val currentRoute = currentBackStack?.destination?.route
+        val isBelongToMain =
+            bottomTabScreens.firstOrNull { currentRoute == it.route } != null
+
+        //Recheck if user navigated back to root screen
+        if (isBelongToMain && selectingTab != currentRoute) selectingTab = currentRoute!!
 
         CompositionLocalProvider(
             values = arrayOf(
@@ -56,10 +76,15 @@ fun TaipeiTourApp() {
             Scaffold(
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
-                    if (!showLandingScreen) BottomBar(currentPage = selectingTab, onSwitchPage = {
-                        selectingTab = it
-                        navController.navigateSingleTopTo(it)
-                    })
+                    AnimatedVisibility(
+                        visible = isBelongToMain,
+                        enter = scaleIn() + expandVertically(expandFrom = Alignment.CenterVertically)
+                    ) {
+                        BottomBar(currentPage = selectingTab, onSwitchPage = {
+                            selectingTab = it
+                            navController.navigateSingleTopTo(it)
+                        })
+                    }
                 }
             ) { contentPadding ->
                 Box(modifier = Modifier.padding(contentPadding)) {

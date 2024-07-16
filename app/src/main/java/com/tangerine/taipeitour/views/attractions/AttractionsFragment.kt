@@ -86,7 +86,7 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
 
                     uiState.data.let {
                         when (uiState.state) {
-                            UiState.SUCCESS -> {
+                            UiState.SUCCESS, UiState.IDLE -> {
                                 attractionsAdapter.collection = it.attractionsList
 
                                 //Scroll back to start in new lang was updated
@@ -105,16 +105,13 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
 
                             UiState.ERROR -> Toast.makeText(
                                 requireContext(),
-                                it.latestError?.message,
+                                uiState.handleError(),
                                 Toast.LENGTH_LONG
                             ).show()
 
                             UiState.LOADING -> showLoading(true)
                         }
                     }
-
-                    //Clear caches
-                    uiState.handled()
                 }
             }
         }

@@ -70,13 +70,6 @@ fun BottomButton(
     onSwitchPage: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val animVisibleState = remember { MutableTransitionState(false) }
-    val scope = rememberCoroutineScope()
-
-    scope.launch {
-        animVisibleState.targetState = currentPage == item.route
-    }
-
     IconButton(
         onClick = { onSwitchPage(item.route) },
         modifier = modifier
@@ -91,7 +84,7 @@ fun BottomButton(
             )
 
             androidx.compose.animation.AnimatedVisibility(
-                visibleState = animVisibleState,
+                visible = currentPage == item.route,
                 enter = expandVertically(expandFrom = Alignment.Top),
                 exit = shrinkVertically(animationSpec = tween())
             ) {

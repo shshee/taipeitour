@@ -1,9 +1,12 @@
-package com.tangerine.taipeitour.compose.attractions
+package com.tangerine.taipeitour.compose.attractions.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -18,42 +21,48 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import com.tangerine.core.model.Language
-import com.tangerine.taipeitour.R
+import com.tangerine.core.source.R
+import com.tangerine.taipeitour.compose.others.myPadding
 
 @Composable
-fun HomeToolbar(title: String, updateLanguage: (Language) -> Unit) {
+fun AttractionsScreenHead(
+    title: String,
+    updateLanguage: (Language) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primary)
-            .height(dimensionResource(id = com.tangerine.core.source.R.dimen.toolbar_height)),
+            .background(MaterialTheme.colorScheme.surface)
+            .height(dimensionResource(id = R.dimen.small_top_bar)),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = title,
-            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSecondary
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
         )
-        Languages(updateLanguage = updateLanguage, modifier = Modifier.align(Alignment.CenterEnd))
+        LanguagesOptions(
+            updateLanguage = updateLanguage,
+            modifier = Modifier.align(Alignment.CenterEnd)
+        )
     }
 }
 
 @Composable
-fun Languages(updateLanguage: (Language) -> Unit, modifier: Modifier = Modifier) {
+fun LanguagesOptions(updateLanguage: (Language) -> Unit, modifier: Modifier = Modifier) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = modifier) {
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_translate_12sdp),
+                imageVector = Icons.Default.Translate,
                 contentDescription = "More",
-                tint = MaterialTheme.colorScheme.onSecondary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -72,10 +81,4 @@ fun Languages(updateLanguage: (Language) -> Unit, modifier: Modifier = Modifier)
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun MyPreview() {
-    HomeToolbar(title = "Test", {})
 }

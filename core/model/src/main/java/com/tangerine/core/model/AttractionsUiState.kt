@@ -34,9 +34,13 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
         latestError = ex
     })
 
-    fun handled() {
+    fun handleError(): String? {
+        val current = data.latestError?.message
+
+        state = UiState.IDLE
         data.latestError = null
-        data.updateType = AttractionsUpdate.NOTHING.ordinal
+
+        return current
     }
 
     private fun generateNewState(
@@ -48,10 +52,16 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
     )
 }
 
-data class AttractionsData(
+class AttractionsData(
     var currentPage: Int = 1,
     var currentLang: String = Language.TAIWAN.code,
     var attractionsList: MutableList<Attraction> = mutableListOf(),
-    var latestError: Throwable? = null,
     var updateType: Int = AttractionsUpdate.NOTHING.ordinal,
-)
+) {
+    internal var latestError: Throwable? = null
+        get() = field
+        set(value) {
+            field = value
+            if (value == null) updateType = AttractionsUpdate.NOTHING.ordinal
+        }
+}
