@@ -15,6 +15,9 @@
     <string name="home">Home</string>
     <string name="bookmarks">Bookmarks</string>
 
+    <string name="trending">Trending</string>
+    <string name="more_tour">More tours</string>
+
     <string name="chinese_taiwan">Chinese (Taiwan)</string>
     <string name="chinese_prc">Chinese (PRC)</string>
     <string name="japanese">Japanese</string>

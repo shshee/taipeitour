@@ -35,8 +35,7 @@ fun AttractionsScreenHead(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .height(dimensionResource(id = R.dimen.small_top_bar)),
+            .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -81,4 +80,13 @@ fun LanguagesOptions(updateLanguage: (Language) -> Unit, modifier: Modifier = Mo
             }
         }
     }
+}
+
+@Composable
+fun HomeScreenLabel(text: String) {
+    Text(
+        text = text, modifier = Modifier.padding(
+            horizontal = myPadding()
+        ), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold
+    )
 }
