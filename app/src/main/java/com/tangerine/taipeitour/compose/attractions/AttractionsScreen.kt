@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,15 +23,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.tangerine.core.model.Attraction
 import com.tangerine.core.model.AttractionsUiState
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.core.source.R
+import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreenBody
 import com.tangerine.taipeitour.compose.attractions.components.MoreAttractionElement
 import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreenHead
 import com.tangerine.taipeitour.compose.attractions.components.HomeScreenLabel
 import com.tangerine.taipeitour.compose.attractions.components.TrendAttractionElement
+import com.tangerine.taipeitour.compose.attractions.components.TrendingAttractions
 import com.tangerine.taipeitour.compose.others.LocalSnackbarHostState
 import com.tangerine.taipeitour.compose.others.myPadding
 import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
@@ -43,85 +49,21 @@ fun AttractionsScreen(
 ) {
     val uiState by viewModel.attractionUiState.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(myPadding())) {
-            item {
-                AttractionsScreenHead(
-                    title = Language.getLanguageFromCode(uiState.data.currentLang).appName,
-                    updateLanguage = {
-                        viewModel.updateNewLang(
-                            it
-                        )
-                    })
+    val swipeRefreshState = rememberSwipeRefreshState(uiState.state == UiState.LOADING)
 
-                HomeScreenLabel(text = stringResource(id = R.string.trending))
-            }
+    if (uiState.state == UiState.ERROR) {
+        val snackbarHostState = LocalSnackbarHostState.current
+        val message = uiState.handleError()
+            ?: stringResource(id = R.string.something_went_wrong)
+        val retry = stringResource(id = R.string.retry)
 
-            item {
-                LazyHorizontalGrid(
-                    rows = GridCells.Fixed(1), modifier = Modifier
-                        .height(210.dp)
-                        .padding(horizontal = myPadding()),
-                    horizontalArrangement = Arrangement.spacedBy(myPadding())
-                ) {
-                    items(uiState.data.attractionsList) {
-                        TrendAttractionElement(onViewDetails = onViewDetails, attraction = it)
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(myPadding()))
-                HomeScreenLabel(text = stringResource(id = R.string.more_tour))
-            }
-
-            items(uiState.data.attractionsList) {
-                MoreAttractionElement(
-                    onViewDetails = onViewDetails,
-                    attraction = it,
-                    modifier = Modifier.padding(
-                        start = myPadding(),
-                        end = myPadding()
-                    )
+        LaunchedEffect(Unit) {
+            val result = snackbarHostState
+                .showSnackbar(
+                    message = message,
+                    //actionLabel = retry,
+                    duration = SnackbarDuration.Short
                 )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(myPadding()))
-            }
-        }
-
-        AttractionsScreenLoader(
-            uiState = uiState
-        )
-    }
-
-}
-
-@Composable
-fun AttractionsScreenLoader(
-    uiState: AttractionsUiState
-) {
-    when (uiState.state) {
-        UiState.LOADING -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
-
-        UiState.ERROR -> {
-            val snackbarHostState = LocalSnackbarHostState.current
-            val message = uiState.handleError()
-                ?: stringResource(id = R.string.something_went_wrong)
-            val retry = stringResource(id = R.string.retry)
-
-            LaunchedEffect(Unit) {
-                val result = snackbarHostState
-                    .showSnackbar(
-                        message = message,
-                        //actionLabel = retry,
-                        duration = SnackbarDuration.Short
-                    )
 
 //                        when (result) {
 //                            SnackbarResult.ActionPerformed -> {
@@ -131,12 +73,47 @@ fun AttractionsScreenLoader(
 //                            SnackbarResult.Dismissed -> {
 //                            }
 //                        }
+        }
+    }
+
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = {
+            viewModel.getAttractions()
+        },
+        indicator = { state, trigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = trigger,
+                scale = true,
+                contentColor = MaterialTheme.colorScheme.primary
+            )
+        }
+    ) {
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(myPadding())) {
+            item {
+                AttractionsScreenHead(
+                    title = Language.getLanguageFromCode(uiState.data.currentLang).appName,
+                    updateLanguage = {
+                        viewModel.updateNewLang(
+                            it
+                        )
+                    })
+            }
+
+            AttractionsScreenBody(
+                scope = this,
+                listItems = uiState.data.attractionsList,
+                onViewDetails = onViewDetails
+            )
+
+            item {
+                Spacer(modifier = Modifier.height(myPadding()))
             }
         }
-
-        else -> {}
     }
 }
+
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
