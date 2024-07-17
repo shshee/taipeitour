@@ -12,6 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -74,6 +75,7 @@ fun TaipeiTourApp() {
             )
         ) {
             Scaffold(
+                modifier = Modifier.statusBarsPadding(), //Important to remove padding otherwise there will be space between parent and children scaffold
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     AnimatedVisibility(
