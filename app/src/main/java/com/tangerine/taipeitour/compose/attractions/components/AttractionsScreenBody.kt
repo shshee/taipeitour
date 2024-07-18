@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -24,10 +25,16 @@ import com.tangerine.taipeitour.compose.others.myPadding
 
 @Composable
 fun AttractionsScreenBody(
+    scrollState: LazyListState,
     listItems: List<Attraction>,
-    onViewDetails: (Int) -> Unit
+    onViewDetails: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(myPadding())) {
+    LazyColumn(
+        state = scrollState,
+        verticalArrangement = Arrangement.spacedBy(myPadding()),
+        modifier = modifier
+    ) {
         if (listItems.isNotEmpty()) {
             item {
                 Spacer(modifier = Modifier.height(myPadding()))
@@ -39,15 +46,17 @@ fun AttractionsScreenBody(
             }
 
             item {
-                TrendingAttractions(listItems = listItems, onViewDetails = onViewDetails)
+                TrendingAttractions(
+                    listItems = listItems.subList(0, 6),
+                    onViewDetails = onViewDetails
+                )
             }
         }
 
         if (listItems.isNotEmpty()) {
             item {
-                Spacer(modifier = Modifier.height(myPadding()*3))
+                Spacer(modifier = Modifier.height(myPadding() * 3))
                 HomeScreenLabel(text = stringResource(id = R.string.more_tour))
-                Spacer(modifier = Modifier.height(myPadding()))
             }
 
             MoreAttractions(scope = this, listItems = listItems, onViewDetails = onViewDetails)
@@ -69,7 +78,7 @@ fun TrendingAttractions(
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(1), modifier = Modifier
-            .height(210.dp)
+            .height(200.dp)
             .padding(horizontal = myPadding()),
         horizontalArrangement = Arrangement.spacedBy(myPadding())
     ) {
@@ -101,6 +110,6 @@ fun HomeScreenLabel(text: String) {
     Text(
         text = text, modifier = Modifier.padding(
             horizontal = myPadding()
-        ), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold
+        ), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold
     )
 }

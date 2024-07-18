@@ -72,7 +72,7 @@ fun MoreAttractionElement(
             ) {
                 HtmlText(
                     text = attraction.name,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
                 HtmlText(
@@ -110,7 +110,7 @@ fun TrendAttractionElement(
 ) {
     Card(
         shape = RoundedCornerShape(10.dp),
-        modifier = modifier.width(260.dp),
+        modifier = modifier.width(250.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         onClick = { onViewDetails(attraction.id) }
     ) {

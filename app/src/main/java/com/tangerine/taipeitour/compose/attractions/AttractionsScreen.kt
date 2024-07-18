@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -52,6 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttractionsScreen(
+    scrollState: LazyListState,
     onViewDetails: (Int) -> Unit,
     viewModel: AttractionsViewModel = koinViewModel()
 ) {
@@ -112,6 +115,7 @@ fun AttractionsScreen(
             }, modifier = Modifier.padding(it)
         ) {
             AttractionsScreenBody(
+                scrollState = scrollState,
                 listItems = uiState.data.attractionsList,
                 onViewDetails = onViewDetails
             )

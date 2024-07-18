@@ -43,8 +43,8 @@ fun AttractionsScreenHead(
     Surface(shadowElevation = 2.dp) {
         CenterAlignedTopAppBar(
             colors = TopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                scrolledContainerColor = MaterialTheme.colorScheme.onPrimary,
                 navigationIconContentColor = primaryColor,
                 titleContentColor = primaryColor,
                 actionIconContentColor = primaryColor
