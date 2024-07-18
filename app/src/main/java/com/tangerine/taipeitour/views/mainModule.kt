@@ -1,7 +1,7 @@
 package com.tangerine.taipeitour.views
 
 import com.tangerine.taipeitour.views.attractions.AttractionsAdapter
-import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.dsl.factoryOf

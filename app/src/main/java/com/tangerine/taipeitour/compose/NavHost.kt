@@ -7,11 +7,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.tangerine.taipeitour.compose.attractions.AttractionsScreen
 import com.tangerine.taipeitour.compose.attractions.details.AttractionDetailsScreen
 import com.tangerine.taipeitour.compose.bookmarks.BookmarksScreen
-import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

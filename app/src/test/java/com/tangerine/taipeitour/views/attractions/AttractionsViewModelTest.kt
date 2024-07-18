@@ -4,6 +4,7 @@ import com.tangerine.core.api.attractions.AttractionsRepo
 import com.tangerine.core.api.base.BaseRepo
 import com.tangerine.core.model.AttractionsResp
 import com.tangerine.core.model.UiState
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule

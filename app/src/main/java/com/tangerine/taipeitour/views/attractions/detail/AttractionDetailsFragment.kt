@@ -12,7 +12,7 @@ import com.tangerine.core.ultis.setOnSingleClickListener
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionDetailsBinding
 import com.tangerine.taipeitour.views.base.BaseFragment
-import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import com.tangerine.taipeitour.views.common.WebviewFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 

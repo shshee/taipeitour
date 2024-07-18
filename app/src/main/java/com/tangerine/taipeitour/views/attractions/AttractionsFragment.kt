@@ -12,12 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
-import com.tangerine.core.model.AttractionsUiState
 import com.tangerine.core.model.AttractionsUpdate
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.core.source.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionsBinding
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import com.tangerine.taipeitour.views.attractions.detail.AttractionDetailsFragment
 import com.tangerine.taipeitour.views.base.BaseFragment
 import kotlinx.coroutines.launch

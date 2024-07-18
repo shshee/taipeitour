@@ -1,9 +1,8 @@
-package com.tangerine.taipeitour.views.attractions
+package com.tangerine.taipeitour.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.tangerine.core.api.attractions.AttractionsRepo
 import com.tangerine.core.api.base.BaseRepo
-import com.tangerine.core.model.AttractionsData
 import com.tangerine.core.model.AttractionsResp
 import com.tangerine.core.model.AttractionsUiState
 import com.tangerine.core.model.Language

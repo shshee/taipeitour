@@ -110,7 +110,9 @@ fun TrendAttractionElement(
 ) {
     Card(
         shape = RoundedCornerShape(10.dp),
-        modifier = modifier.width(250.dp),
+        modifier = modifier
+            .height(200.dp)
+            .width(250.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         onClick = { onViewDetails(attraction.id) }
     ) {

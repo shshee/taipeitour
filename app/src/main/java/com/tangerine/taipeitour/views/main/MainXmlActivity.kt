@@ -8,7 +8,7 @@ import android.view.View
 import androidx.core.view.MenuProvider
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.ActivityMainBinding
-import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import com.tangerine.taipeitour.views.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

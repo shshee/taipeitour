@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -76,9 +77,8 @@ fun TrendingAttractions(
     listItems: List<Attraction>,
     onViewDetails: (Int) -> Unit
 ) {
-    LazyHorizontalGrid(
-        rows = GridCells.Fixed(1), modifier = Modifier
-            .height(200.dp)
+    LazyRow(
+        modifier = Modifier
             .padding(horizontal = myPadding()),
         horizontalArrangement = Arrangement.spacedBy(myPadding())
     ) {

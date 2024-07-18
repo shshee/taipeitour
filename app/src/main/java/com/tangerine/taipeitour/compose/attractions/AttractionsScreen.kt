@@ -1,54 +1,36 @@
 package com.tangerine.taipeitour.compose.attractions
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.tangerine.core.model.Attraction
-import com.tangerine.core.model.AttractionsUiState
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.core.source.R
 import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreenBody
-import com.tangerine.taipeitour.compose.attractions.components.MoreAttractionElement
 import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreenHead
-import com.tangerine.taipeitour.compose.attractions.components.HomeScreenLabel
-import com.tangerine.taipeitour.compose.attractions.components.TrendAttractionElement
-import com.tangerine.taipeitour.compose.attractions.components.TrendingAttractions
 import com.tangerine.taipeitour.compose.others.LocalSnackbarHostState
-import com.tangerine.taipeitour.compose.others.myPadding
-import com.tangerine.taipeitour.views.attractions.AttractionsViewModel
+import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,11 +96,15 @@ fun AttractionsScreen(
                 )
             }, modifier = Modifier.padding(it)
         ) {
-            AttractionsScreenBody(
-                scrollState = scrollState,
-                listItems = uiState.data.attractionsList,
-                onViewDetails = onViewDetails
-            )
+            //Only show loading when its content make it to the composition
+            //so we have to wrap this screen to a place holder in order to show loading while waiting for it
+            Surface(modifier = Modifier.fillMaxSize()) {
+                AttractionsScreenBody(
+                    scrollState = scrollState,
+                    listItems = uiState.data.attractionsList,
+                    onViewDetails = onViewDetails
+                )
+            }
         }
     }
 }
