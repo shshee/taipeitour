@@ -17,6 +17,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavHost(
     navController: NavHostController,
     scrollState: LazyListState,
+    isBottomBarHidden: Boolean,
     modifier: Modifier = Modifier
 ) {
     val attractionsViewModel = koinViewModel<AttractionsViewModel>()
@@ -36,7 +37,7 @@ fun NavHost(
                                     it
                                 )
                             )
-                        }, viewModel = attractionsViewModel)
+                        }, isBottomBarHidden = isBottomBarHidden, viewModel = attractionsViewModel)
                     }
 
                     is BookmarksPage -> BookmarksScreen()

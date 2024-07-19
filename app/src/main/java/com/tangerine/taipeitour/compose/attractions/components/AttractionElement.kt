@@ -22,6 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +41,9 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import com.tangerine.core.model.Attraction
 import com.tangerine.taipeitour.compose.others.myPadding
 import de.charlex.compose.material3.HtmlText
@@ -156,7 +162,14 @@ fun MyPreview() {
 
 @Composable
 fun AttractionImage(modifier: Modifier = Modifier, url: String?) {
-    Box(modifier = Modifier.background(MaterialTheme.colorScheme.inversePrimary)) {
+    val showPlaceHolder = rememberSaveable { mutableStateOf(true) }
+    Box(
+        modifier = Modifier.placeholder(
+            visible = showPlaceHolder.value,
+            color = MaterialTheme.colorScheme.primary,
+            highlight = PlaceholderHighlight.shimmer(highlightColor = MaterialTheme.colorScheme.inversePrimary)
+        )
+    ) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(url)
@@ -167,11 +180,10 @@ fun AttractionImage(modifier: Modifier = Modifier, url: String?) {
             modifier = modifier
         ) {
             val state = painter.state
-            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                Box(contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
+            val completed =
+                !(state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error)
+            if (completed) {
+                showPlaceHolder.value = false
                 SubcomposeAsyncImageContent()
             }
         }
