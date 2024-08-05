@@ -2,6 +2,8 @@ package com.tangerine.taipeitour.compose
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -50,7 +52,14 @@ fun NavHost(
             arguments = AttractionDetailsPage.arguments,
         ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getInt(AttractionDetailsPage.attractionIdArg)
-            AttractionDetailsScreen(item = attractionsViewModel.attractionUiState.value.data.attractionsList.first { it.id == id })
+            val uiState by attractionsViewModel.attractionUiState.collectAsState()
+
+//            LaunchedEffect(Unit) {
+//                DatabaseImpl.attractionsLocalRepoImpl.saveAttraction(uiState.data.attractionsList.first { it.id == id }).let {
+//                    println("Result: $it")
+//                }
+//            }
+            AttractionDetailsScreen(item = uiState.data.attractionsList.first { it.id == id })
         }
     }
 }

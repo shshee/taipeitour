@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,37 +30,40 @@ import com.tangerine.taipeitour.compose.others.createShape
 
 @Composable
 fun BottomBar(currentPage: String, onSwitchPage: (String) -> Unit) {
-    Card(
-        shape = RoundedCornerShape(
-            topEnd = 10.dp,
-            topStart = 10.dp,
-            bottomEnd = 0.dp,
-            bottomStart = 0.dp
-        ),
-        modifier = Modifier
-            .border(
-                BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
-                createShape(10.dp)
-            )
-            .height(dimensionResource(id = com.tangerine.core.source.R.dimen.small_top_bar))
-    ) {
+//    Card(
+//        shape = RoundedCornerShape(
+//            topEnd = 10.dp,
+//            topStart = 10.dp,
+//            bottomEnd = 0.dp,
+//            bottomStart = 0.dp
+//        ),
+//        modifier = Modifier
+//            .border(
+//                BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+//                createShape(10.dp)
+//            )
+//            .height(dimensionResource(id = com.tangerine.core.source.R.dimen.small_top_bar))
+//    ) {
+    Column {
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
         BottomAppBar(
-            containerColor = MaterialTheme.colorScheme.onSecondary
+            containerColor = MaterialTheme.colorScheme.onSecondary,
+            modifier = Modifier.height(50.dp)
         ) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                bottomTabScreens.forEach {
-                    BottomButton(
-                        currentPage = currentPage,
-                        item = it,
-                        onSwitchPage = onSwitchPage,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                    )
-                }
+            bottomTabScreens.forEach {
+                BottomButton(
+                    currentPage = currentPage,
+                    item = it,
+                    onSwitchPage = onSwitchPage,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                )
             }
         }
     }
+
+    //}
 }
 
 @Composable

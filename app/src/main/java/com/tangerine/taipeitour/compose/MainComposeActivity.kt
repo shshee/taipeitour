@@ -100,7 +100,7 @@ fun TaipeiTourApp(barsColor: (Int) -> Unit) {
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     AnimatedVisibility(
-                        visible = isBelongToMain && !willHideBottomBar,
+                        visible = !showLandingScreen,//isBelongToMain && !willHideBottomBar,
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {

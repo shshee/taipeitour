@@ -48,10 +48,11 @@ android {
 
 
 dependencies {
-    implementation(project(mapOf("path" to ":core:model")))
-    implementation(project(mapOf("path" to ":core:utils")))
-    implementation(project(mapOf("path" to ":core:api")))
-    implementation(project(mapOf("path" to ":core:source")))
+    implementation(project(":core:model"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:api"))
+    implementation(project(":core:database"))
+    implementation(project(":core:source"))
 
     implementation(libs.bundles.main)
     implementation(libs.bundles.size)

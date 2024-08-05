@@ -8,6 +8,8 @@ import android.os.SystemClock
 import android.text.Html
 import android.text.Spanned
 import android.view.View
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 @SuppressLint("MissingPermission")
 fun Context.isNetworkAvailable(): Boolean {
@@ -45,4 +47,30 @@ class OnSingleClickListener(
 
 fun View.setOnSingleClickListener(timeDelayInSecond: Int = 500, block: () -> Unit) {
     setOnClickListener(OnSingleClickListener(timeDelayInSecond, block))
+}
+
+fun toJson(obj: Any?): String {
+    return Gson().toJson(obj)
+}
+
+fun <T> mapToObject(any: Any?, type: Class<T>): T? {
+    if (any == null) return null
+    val map = any as Map<String, Any?>
+
+    val gson = Gson()
+    val json = gson.toJson(map)
+    return gson.fromJson(json, type)
+}
+
+inline fun <reified T> toObject(str: String?): T? {
+    return Gson().fromJson(str, T::class.java)
+}
+
+/**
+ *  Convert str to list Item
+ *  Ex: GSonUtils.toList<List<DATACLASS>>(str)
+ */
+inline fun <reified T> toList(str: String?): T? {
+    if (str == null) return null
+    return Gson().fromJson(str, object : TypeToken<T>() {}.type)
 }

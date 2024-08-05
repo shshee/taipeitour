@@ -2,6 +2,7 @@ package com.tangerine.taipeitour
 
 import android.app.Application
 import com.tangerine.core.api.apiModule
+import com.tangerine.core.database.DatabaseImpl
 import com.tangerine.taipeitour.views.mainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,6 +20,8 @@ class TaipeiTourApplication : Application() {
             androidLogger()
             modules(getAllModules().map { it })
         }
+
+        DatabaseImpl.initDatabase(applicationContext)
     }
 
     private fun getAllModules() = listOf(apiModule, mainModule)
