@@ -4,12 +4,12 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
     fun updateAttractions(
         newPage: Int,
         newLang: String,
-        attractions: MutableList<Attraction>
+        attractions: List<Attraction>
     ): AttractionsUiState {
         val isOnSamePage = newPage == data.currentPage
         val isOnDiffLang = newLang != data.currentLang
 
-        val newData = if (isOnDiffLang || isOnSamePage) attractions else data.attractionsList.also {
+        val newData = if (isOnDiffLang || isOnSamePage) attractions.toMutableList() else data.attractionsList.also {
             it.addAll(attractions)
         }
         val anyUpdates = when {

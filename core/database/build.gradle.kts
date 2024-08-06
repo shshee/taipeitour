@@ -26,6 +26,7 @@ dependencies {
     implementation(project(mapOf("path" to ":core:model")))
     implementation(project(mapOf("path" to ":core:utils")))
 
+    implementation(libs.bundles.koin)
     implementation(libs.gson.core)
 
     implementation(libs.bundles.room)

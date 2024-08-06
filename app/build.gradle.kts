@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.navigation.ui)
     annotationProcessor(libs.glide.complier)
 
+    implementation(libs.airbnb.lottie)
+
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.turbine)

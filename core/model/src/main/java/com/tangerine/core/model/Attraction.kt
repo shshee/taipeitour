@@ -22,9 +22,11 @@ data class Attraction(
     val url: String,
 
     @field:SerializedName("images")
-    val images: List<Image> = emptyList()
-) : Parcelable {
+    val images: List<Image> = emptyList(),
 
+    @field:SerializedName("saved")
+    var isSaved: Boolean = false
+) : Parcelable {
     @Parcelize
     data class Image(
         @field:SerializedName("src")

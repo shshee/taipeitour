@@ -35,6 +35,7 @@ compose-html = "2.0.0-beta01"
 compose-accompanist = "0.35.1-alpha"
 coil = "2.6.0"
 room = "2.6.1"
+airbnb-lottie = "6.5.0"
 
 agp = "8.1.0"
 org-jetbrains-kotlin-android = "1.9.10"
@@ -89,6 +90,8 @@ android-test-espresso = { module = "androidx.test.espresso:espresso-core", versi
 room-core = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-complier = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-coroutines = {module = "androidx.room:room-ktx", version.ref = "room"}
+
+airbnb-lottie = { module = "com.airbnb.android:lottie-compose", version.ref="airbnb-lottie"}
 
 [bundles]
 main = ["core-ktx", "app-compat", "material-design", "constraint-layout"]
