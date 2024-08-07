@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,13 +50,16 @@ import com.tangerine.core.model.Attraction
 import com.tangerine.taipeitour.compose.others.myPadding
 import com.tangerine.taipeitour.compose.others.noRippleClickable
 import de.charlex.compose.material3.HtmlText
+import kotlinx.coroutines.launch
 
 @Composable
 fun MoreAttractionElement(
-    onViewDetails: (Int) -> Unit,
+    onModifyBookmark: suspend (Int, Boolean) -> Boolean,
+    onViewDetails: (Attraction) -> Unit,
     attraction: Attraction,
     modifier: Modifier = Modifier
 ) {
+    val scope = rememberCoroutineScope()
     val imageSize = 110.dp
     val savingState = remember { mutableStateOf(attraction.isSaved) }
 
@@ -65,7 +69,7 @@ fun MoreAttractionElement(
             .fillMaxWidth()
             .height(imageSize),
         elevation = CardDefaults.cardElevation(2.dp),
-        onClick = { onViewDetails(attraction.id) }
+        onClick = { onViewDetails(attraction) }
     ) {
         Row {
             AttractionImage(
@@ -74,10 +78,7 @@ fun MoreAttractionElement(
                     .width(imageSize), url = attraction.images.firstOrNull()?.src
             )
 
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-            ) {
+            Box {
                 Column(modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)) {
                     HtmlText(
                         text = attraction.name,
@@ -107,33 +108,34 @@ fun MoreAttractionElement(
                     }
                 }
 
-                Box(
+                AnimatedContent(
+                    targetState = savingState.value,
+                    transitionSpec = { scaleIn() togetherWith fadeOut() }, label = "",
                     contentAlignment = Alignment.BottomEnd,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .height(50.dp)
-                        .width(75.dp)
                         .noRippleClickable {
-                            attraction.isSaved = !attraction.isSaved
-                            savingState.value = attraction.isSaved
+                            val doSaving = !attraction.isSaved
+
+                            scope.launch {
+                                onModifyBookmark(attraction.id, doSaving).let {
+                                    attraction.isSaved = doSaving
+                                    savingState.value = doSaving //Save to recomposition
+                                }
+                            }
                         }
-                ) {
-                    AnimatedContent(
-                        targetState = savingState.value,
-                        transitionSpec = { scaleIn() togetherWith fadeOut() }, label = ""
-                    ) { saved ->
-                        if (!saved) Icon(
-                            imageVector = Icons.Filled.AddCircleOutline,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
-                        ) else Icon(
-                            imageVector = Icons.Filled.CheckCircle,
-                            contentDescription = null,
-                            tint = Color(0xFF28A745),
-                            modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
-                        )
-                    }
+                ) { saved ->
+                    if (!saved) Icon(
+                        imageVector = Icons.Filled.AddCircleOutline,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
+                    ) else Icon(
+                        imageVector = Icons.Filled.CheckCircle,
+                        contentDescription = null,
+                        tint = Color(0xFF28A745),
+                        modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
+                    )
                 }
             }
         }
@@ -142,7 +144,7 @@ fun MoreAttractionElement(
 
 @Composable
 fun TrendAttractionElement(
-    onViewDetails: (Int) -> Unit,
+    onViewDetails: (Attraction) -> Unit,
     attraction: Attraction,
     modifier: Modifier = Modifier
 ) {
@@ -152,7 +154,7 @@ fun TrendAttractionElement(
             .height(200.dp)
             .width(250.dp),
         elevation = CardDefaults.cardElevation(2.dp),
-        onClick = { onViewDetails(attraction.id) }
+        onClick = { onViewDetails(attraction) }
     ) {
         Box {
             AttractionImage(

@@ -1,10 +1,12 @@
 package com.tangerine.core.model
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Immutable
 data class Attraction(
     @field:SerializedName("id")
     val id: Int,

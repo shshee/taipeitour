@@ -36,7 +36,7 @@ fun NavHost(
                         AttractionsScreen(scrollState = scrollState, onViewDetails = {
                             navController.navigateSingleTopTo(
                                 AttractionDetailsPage.generateRouteFromId(
-                                    it
+                                    it.id
                                 )
                             )
                         }, isBottomBarHidden = isBottomBarHidden, viewModel = attractionsViewModel)

@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tangerine.core.database.repo.AttractionsLocalRepoImpl
 import org.koin.compose.koinInject
 
@@ -18,7 +19,7 @@ import org.koin.compose.koinInject
 fun BookmarksScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val data = koinInject<AttractionsLocalRepoImpl>()
-        val test = data.getAllSavedAttractions().collectAsState(initial = listOf())
+        val test = data.listenToAllSavedAttractions().collectAsStateWithLifecycle(emptyList())
 
         LazyColumn {
             items(test.value) {

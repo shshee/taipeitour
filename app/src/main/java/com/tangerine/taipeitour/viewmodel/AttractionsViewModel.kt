@@ -1,6 +1,7 @@
 package com.tangerine.taipeitour.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tangerine.core.api.attractions.AttractionsRepo
 import com.tangerine.core.api.base.BaseRepo
 import com.tangerine.core.database.repo.AttractionsLocalRepoImpl
@@ -11,6 +12,7 @@ import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.taipeitour.views.base.BaseViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,7 +26,7 @@ class AttractionsViewModel(
     private val _attractionsUiState: MutableStateFlow<AttractionsUiState> =
         MutableStateFlow(AttractionsUiState(UiState.LOADING))
     val attractionUiState: StateFlow<AttractionsUiState> = _attractionsUiState
-    val attractionsLocalRepo: AttractionsLocalRepoImpl by inject()
+    private val attractionsLocalRepo: AttractionsLocalRepoImpl by inject()
 
     init {
         getAttractions()
@@ -44,13 +46,14 @@ class AttractionsViewModel(
                 attractionsRepo.getAttractions(lang = newLang, page = newPage).collect { api ->
                     when (api) {
                         is BaseRepo.ApiResponse.Success<*> -> {
-                            attractionsLocalRepo.getAllSavedAttractions().collect { local ->
-                                it.value = it.value.updateAttractions(
-                                    newPage,
-                                    newLang,
-                                    updateBookmarked((api.response as AttractionsResp).data, local)
+                            it.value = it.value.updateAttractions(
+                                newPage,
+                                newLang,
+                                updateBookmarked(
+                                    (api.response as AttractionsResp).data,
+                                    attractionsLocalRepo.getAllSavedAttrIds()
                                 )
-                            }
+                            )
                         }
 
                         is BaseRepo.ApiResponse.Failure -> it.value =
@@ -67,15 +70,14 @@ class AttractionsViewModel(
 
     private fun updateBookmarked(
         newAttrs: List<Attraction>?,
-        savedAttrs: List<Attraction?>?
+        savedIds: List<Int?>?
     ) = when {
         newAttrs == null -> mutableListOf()
-        savedAttrs == null -> newAttrs
+        savedIds == null -> newAttrs
         else -> {
-            val hashSet = HashSet(savedAttrs.map { it?.id })
+            val hashSet = HashSet(savedIds)
             val rs = mutableListOf<Attraction>()
 
-            println("Set: $hashSet")
             newAttrs.forEach {
                 rs.add(it.apply {
                     isSaved = hashSet.contains(id)
@@ -84,5 +86,23 @@ class AttractionsViewModel(
 
             rs
         }
+    }
+
+    suspend fun modifyBookmark(id: Int, doSaving: Boolean): Boolean {
+        val job = viewModelScope.async(this.dispatcher) {
+            try {
+                val attraction =
+                    attractionUiState.value.data.attractionsList.first { it.id == id }.copy().also {
+                        it.isSaved = doSaving
+                    }
+
+                if (doSaving) return@async attractionsLocalRepo.saveAttraction(attraction)
+                else return@async attractionsLocalRepo.removeSavedAttraction(id)
+            } catch (ex: Exception) {
+                false
+            }
+        }
+
+        return job.await()
     }
 }

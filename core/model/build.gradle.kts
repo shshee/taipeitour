@@ -25,4 +25,5 @@ android {
 dependencies {
     implementation(project(mapOf("path" to ":core:source")))
     implementation(libs.gson.core)
+    implementation(libs.compose.runtime)
 }

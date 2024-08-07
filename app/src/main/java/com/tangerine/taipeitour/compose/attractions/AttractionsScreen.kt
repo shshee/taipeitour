@@ -48,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 fun AttractionsScreen(
     scrollState: LazyListState,
     isBottomBarHidden: Boolean,
-    onViewDetails: (Int) -> Unit,
+    onViewDetails: (Attraction) -> Unit,
     viewModel: AttractionsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.attractionUiState.collectAsState()
@@ -138,6 +138,9 @@ fun AttractionsScreen(
                 AttractionsScreenBody(
                     scrollState = scrollState,
                     listItems = uiState.data.attractionsList,
+                    onModifyBookmark = { id, isSaved ->
+                        viewModel.modifyBookmark(id, isSaved)
+                    },
                     onViewDetails = onViewDetails
                 )
             }

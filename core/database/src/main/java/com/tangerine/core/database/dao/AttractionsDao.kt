@@ -9,8 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AttractionsDao {
+    @Query("SELECT id FROM SavedAttractions")
+    fun getAllSavedAttrIds(): List<Int?>
+
     @Query("SELECT * FROM SavedAttractions")
-    fun getAllSavedAttractions(): Flow<List<SavedAttractionEntity>>
+    fun listenAllSavedAttractions(): Flow<List<SavedAttractionEntity>>
 
     @Query("SELECT * FROM SavedAttractions WHERE id = :id")
     suspend fun getSavedAttractions(id: Int): SavedAttractionEntity

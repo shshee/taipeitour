@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +29,8 @@ import com.tangerine.taipeitour.compose.others.myPadding
 fun AttractionsScreenBody(
     scrollState: LazyListState,
     listItems: List<Attraction>,
-    onViewDetails: (Int) -> Unit,
+    onModifyBookmark: suspend (Int, Boolean) -> Boolean,
+    onViewDetails: (Attraction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -48,7 +50,7 @@ fun AttractionsScreenBody(
 
             item {
                 TrendingAttractions(
-                    listItems = listItems.subList(0, 6),
+                    listItems = listItems.take(5),
                     onViewDetails = onViewDetails
                 )
             }
@@ -60,42 +62,46 @@ fun AttractionsScreenBody(
                 HomeScreenLabel(text = stringResource(id = R.string.more_tour))
             }
 
-            MoreAttractions(scope = this, listItems = listItems, onViewDetails = onViewDetails)
+            MoreAttractions(
+                scope = this,
+                listItems = listItems,
+                onModifyBookmark = onModifyBookmark,
+                onViewDetails = onViewDetails
+            )
         }
 
         item {
             Spacer(modifier = Modifier.height(myPadding()))
         }
     }
-
-
 }
 
 
 @Composable
 fun TrendingAttractions(
     listItems: List<Attraction>,
-    onViewDetails: (Int) -> Unit
+    onViewDetails: (Attraction) -> Unit
 ) {
     LazyRow(
         modifier = Modifier
             .padding(horizontal = myPadding()),
         horizontalArrangement = Arrangement.spacedBy(myPadding())
     ) {
-        items(listItems) {
+        items(items = listItems, key = { it.id }) {
             TrendAttractionElement(onViewDetails = onViewDetails, attraction = it)
         }
     }
 }
 
-
 fun MoreAttractions(
     scope: LazyListScope,
     listItems: List<Attraction>,
-    onViewDetails: (Int) -> Unit
+    onModifyBookmark: suspend (Int, Boolean) -> Boolean,
+    onViewDetails: (Attraction) -> Unit
 ) {
-    scope.items(listItems) {
+    scope.items(items = listItems, key = { it.id }) {
         MoreAttractionElement(
+            onModifyBookmark = onModifyBookmark,
             onViewDetails = onViewDetails,
             attraction = it,
             modifier = Modifier.padding(

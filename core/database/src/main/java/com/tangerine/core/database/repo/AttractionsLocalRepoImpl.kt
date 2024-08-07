@@ -9,14 +9,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class AttractionsLocalRepoImpl(private val attractionsDao: AttractionsDao) : AttractionsLocalRepo {
-    val INSERTED_SUCCESSFULLY = 1L
+    val INSERTED_FAILED = 1L
 
-    override fun getAllSavedAttractions(): Flow<List<Attraction?>> =
-        attractionsDao.getAllSavedAttractions().map { list ->
+    override fun listenToAllSavedAttractions(): Flow<List<Attraction?>> =
+        attractionsDao.listenAllSavedAttractions().map { list ->
             list.sortedByDescending { it.timeStamp }.map { item ->
                 toObject<Attraction>(item.data)
             }
         }
+
+    override suspend fun getAllSavedAttrIds(): List<Int?> = attractionsDao.getAllSavedAttrIds()
 
     override suspend fun removeSavedAttraction(id: Int) =
         attractionsDao.removeSavedAttraction(id) != 0 //Row effected
@@ -29,9 +31,7 @@ class AttractionsLocalRepoImpl(private val attractionsDao: AttractionsDao) : Att
                 data = toJson(attraction)
             )
         ).let {
-            println("Inserted: $it")
-
-            return it == INSERTED_SUCCESSFULLY
+            return it != INSERTED_FAILED
         }
     }
 }
