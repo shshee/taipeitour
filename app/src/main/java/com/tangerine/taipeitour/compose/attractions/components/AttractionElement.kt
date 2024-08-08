@@ -195,7 +195,7 @@ fun MyPreview() {
 }
 
 @Composable
-fun AttractionImage(modifier: Modifier = Modifier, url: String?) {
+fun AttractionImage(modifier: Modifier = Modifier, url: String?, contentScale: ContentScale = ContentScale.Crop) {
     val showPlaceHolder = rememberSaveable { mutableStateOf(true) }
     Box(
         modifier = Modifier.placeholder(
@@ -210,7 +210,7 @@ fun AttractionImage(modifier: Modifier = Modifier, url: String?) {
                 .crossfade(true)
                 .build(),
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = contentScale,
             modifier = modifier
         ) {
             val state = painter.state

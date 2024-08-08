@@ -2,6 +2,7 @@ package com.tangerine.taipeitour.compose.others
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -13,6 +14,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import com.tangerine.core.source.R
 
@@ -65,5 +67,11 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
         indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
         onClick()
+    }
+}
+
+fun generatePagerPort(columnSize: Int) = object : PageSize {
+    override fun Density.calculateMainAxisPageSize(availableSpace: Int, pageSpacing: Int): Int {
+        return (availableSpace - 2 * pageSpacing) / columnSize
     }
 }
