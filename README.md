@@ -5,8 +5,8 @@ I am working on new features and implementing Jetpack Compose to enhance more be
 ## UI
 ### Before (XML) vs After (Compose)
 <p float="left">
-  <img src="https://i.imgur.com/PlyX6OM.png" width="500">
-  <img src="https://i.imgur.com/Mr7zhaS.png" width="500">
+  <img src="https://i.imgur.com/PlyX6OM.png" width="400">
+  <img src="https://i.imgur.com/Mr7zhaS.png" width="400">
 </p>
 
 ## Technical stack
