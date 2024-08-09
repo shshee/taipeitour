@@ -35,7 +35,6 @@ class AttractionsViewModel(
     fun getAttractions(lang: String? = null, goNextPage: Boolean = false) {
         val data = attractionUiState.value.data
 
-
         val newPage = 1 //data.currentPage + (if (goNextPage) 1 else 0)
         val newLang = lang ?: data.currentLang
 

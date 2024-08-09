@@ -1,5 +1,8 @@
 package com.tangerine.taipeitour.compose.attractions.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -25,10 +28,13 @@ import com.tangerine.core.source.R
 import com.tangerine.taipeitour.compose.others.myPadding
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AttractionsScreenBody(
     scrollState: LazyListState,
     listItems: List<Attraction>,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     onModifyBookmark: suspend (Int, Boolean) -> Boolean,
     onViewDetails: (Attraction) -> Unit,
     modifier: Modifier = Modifier
@@ -50,7 +56,9 @@ fun AttractionsScreenBody(
 
             item {
                 TrendingAttractions(
-                    listItems = listItems.take(5),
+                    listItems = listItems.filter { it.images.isNotEmpty() }.take(10),
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope,
                     onViewDetails = onViewDetails
                 )
             }
@@ -66,6 +74,8 @@ fun AttractionsScreenBody(
                 scope = this,
                 listItems = listItems,
                 onModifyBookmark = onModifyBookmark,
+                sharedTransitionScope = sharedTransitionScope,
+                animatedVisibilityScope = animatedVisibilityScope,
                 onViewDetails = onViewDetails
             )
         }
@@ -77,8 +87,11 @@ fun AttractionsScreenBody(
 }
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TrendingAttractions(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     listItems: List<Attraction>,
     onViewDetails: (Attraction) -> Unit
 ) {
@@ -88,22 +101,32 @@ fun TrendingAttractions(
         horizontalArrangement = Arrangement.spacedBy(myPadding())
     ) {
         items(items = listItems, key = { it.id }) {
-            TrendAttractionElement(onViewDetails = onViewDetails, attraction = it)
+            TrendAttractionElement(
+                onViewDetails = onViewDetails,
+                attraction = it,
+                sharedTransitionScope = sharedTransitionScope,
+                animatedVisibilityScope = animatedVisibilityScope
+            )
         }
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 fun MoreAttractions(
     scope: LazyListScope,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     listItems: List<Attraction>,
     onModifyBookmark: suspend (Int, Boolean) -> Boolean,
     onViewDetails: (Attraction) -> Unit
 ) {
     scope.items(items = listItems, key = { it.id }) {
         MoreAttractionElement(
+            animatedVisibilityScope = animatedVisibilityScope,
             onModifyBookmark = onModifyBookmark,
             onViewDetails = onViewDetails,
             attraction = it,
+            sharedTransitionScope = sharedTransitionScope,
             modifier = Modifier.padding(
                 horizontal = myPadding()
             )

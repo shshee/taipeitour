@@ -1,6 +1,9 @@
 package com.tangerine.taipeitour.compose.attractions
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,10 +46,12 @@ import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun AttractionsScreen(
     scrollState: LazyListState,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     isBottomBarHidden: Boolean,
     onViewDetails: (Attraction) -> Unit,
     viewModel: AttractionsViewModel = koinViewModel()
@@ -138,6 +143,8 @@ fun AttractionsScreen(
                 AttractionsScreenBody(
                     scrollState = scrollState,
                     listItems = uiState.data.attractionsList,
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope,
                     onModifyBookmark = { id, isSaved ->
                         viewModel.modifyBookmark(id, isSaved)
                     },

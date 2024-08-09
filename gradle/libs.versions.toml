@@ -31,6 +31,7 @@ compose-runtime = "1.6.8"
 compose-preview = "1.6.8"
 marterial3 = "1.2.1"
 compose-navigation = "2.7.7"
+compose-animation = "1.7.0-beta07"
 compose-icons = "1.6.8"
 compose-html = "2.0.0-beta01"
 compose-accompanist = "0.35.1-alpha"
@@ -46,7 +47,6 @@ lifecycle-runtime-compose-android = "2.8.4"
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
 app-compat = { module = "androidx.appcompat:appcompat", version.ref = "app-compat" }
-core-ktx-1_9_0 = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
 material-design = { module = "com.google.android.material:material", version.ref = "material-design" }
 constraint-layout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraint-layout" }
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
@@ -56,16 +56,17 @@ compose-core = { module = "androidx.activity:activity-compose", version.ref = "c
 compose-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-preview" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-preview" }
 compose-marterial3 = { module = "androidx.compose.material3:material3", version.ref = "marterial3" }
+compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose-animation" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose-runtime"}
+compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose-runtime" }
 compose-runtime-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycle-runtime-compose-android" }
 
 compose-marterial3-sizes = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "marterial3" }
 compose-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-icons" }
 compose-html = { module = "de.charlex.compose.material3:material3-html-text", version.ref = "compose-html" }
 compose-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-compose-swipe-refresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "compose-accompanist"}
-compose-place-holder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "compose-accompanist"}
+compose-swipe-refresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "compose-accompanist" }
+compose-place-holder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "compose-accompanist" }
 
 di-koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 di-koin-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
@@ -93,9 +94,9 @@ android-test-espresso = { module = "androidx.test.espresso:espresso-core", versi
 
 room-core = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-complier = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-coroutines = {module = "androidx.room:room-ktx", version.ref = "room"}
+room-coroutines = { module = "androidx.room:room-ktx", version.ref = "room" }
 
-airbnb-lottie = { module = "com.airbnb.android:lottie-compose", version.ref="airbnb-lottie"}
+airbnb-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "airbnb-lottie" }
 
 [bundles]
 main = ["core-ktx", "app-compat", "material-design", "constraint-layout"]
@@ -103,9 +104,9 @@ navigation = ["navigation-fragment", "navigation-ui"]
 api = ["retrofit", "logging-interceptor", "gson-core", "gson-converter"]
 size = ["size-sdp", "size-ssp"]
 koin = ["di-koin", "di-koin-compose", "di-koin-navigation"]
-compose = ["compose-core", "compose-preview", "compose-marterial3", "compose-navigation", "compose-runtime-lifecycle"]
-compose-extensions = ["compose-html","compose-marterial3-sizes", "compose-icons", "compose-coil", "compose-swipe-refresh", "compose-place-holder"]
-room = ["room-core","room-coroutines"]
+compose = ["compose-core", "compose-preview", "compose-marterial3", "compose-navigation", "compose-animation", "compose-runtime-lifecycle"]
+compose-extensions = ["compose-html", "compose-marterial3-sizes", "compose-icons", "compose-coil", "compose-swipe-refresh", "compose-place-holder"]
+room = ["room-core", "room-coroutines"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

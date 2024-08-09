@@ -1,5 +1,8 @@
 package com.tangerine.taipeitour.compose
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +18,7 @@ import com.tangerine.taipeitour.compose.bookmarks.BookmarksScreen
 import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NavHost(
     navController: NavHostController,
@@ -24,42 +28,50 @@ fun NavHost(
 ) {
     val attractionsViewModel = koinViewModel<AttractionsViewModel>()
 
-    NavHost(
-        navController = navController,
-        startDestination = bottomTabScreens.first().route,
-        modifier = modifier
-    ) {
-        for (screen in bottomTabScreens) {
-            composable(route = screen.route) {
-                when (screen) {
-                    is AttractionsPage -> {
-                        AttractionsScreen(scrollState = scrollState, onViewDetails = {
-                            navController.navigateSingleTopTo(
-                                AttractionDetailsPage.generateRouteFromId(
-                                    it.id
-                                )
+    SharedTransitionLayout {
+        NavHost(
+            navController = navController,
+            startDestination = bottomTabScreens.first().route,
+            modifier = modifier
+        ) {
+            for (screen in bottomTabScreens) {
+                composable(route = screen.route) {
+                    when (screen) {
+                        is AttractionsPage -> {
+                            AttractionsScreen(
+                                scrollState = scrollState,
+                                onViewDetails = {
+                                    navController.navigateSingleTopTo(
+                                        AttractionDetailsPage.generateRouteFromId(
+                                            it.id
+                                        )
+                                    )
+                                },
+                                isBottomBarHidden = isBottomBarHidden,
+                                viewModel = attractionsViewModel,
+                                sharedTransitionScope = this@SharedTransitionLayout,
+                                animatedVisibilityScope = this
                             )
-                        }, isBottomBarHidden = isBottomBarHidden, viewModel = attractionsViewModel)
-                    }
+                        }
 
-                    is BookmarksPage -> BookmarksScreen()
+                        is BookmarksPage -> BookmarksScreen()
+                    }
                 }
             }
-        }
 
-        composable(
-            route = AttractionDetailsPage.route,
-            arguments = AttractionDetailsPage.arguments,
-        ) { navBackStackEntry ->
-            val id = navBackStackEntry.arguments?.getInt(AttractionDetailsPage.attractionIdArg)
-            val uiState by attractionsViewModel.attractionUiState.collectAsState()
+            composable(
+                route = AttractionDetailsPage.route,
+                arguments = AttractionDetailsPage.arguments,
+            ) { navBackStackEntry ->
+                val id = navBackStackEntry.arguments?.getInt(AttractionDetailsPage.attractionIdArg)
+                val uiState by attractionsViewModel.attractionUiState.collectAsState()
 
-//            LaunchedEffect(Unit) {
-//                DatabaseImpl.attractionsLocalRepoImpl.saveAttraction(uiState.data.attractionsList.first { it.id == id }).let {
-//                    println("Result: $it")
-//                }
-//            }
-            AttractionDetailsScreen(item = uiState.data.attractionsList.first { it.id == id })
+                AttractionDetailsScreen(
+                    item = uiState.data.attractionsList.first { it.id == id },
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this
+                )
+            }
         }
     }
 }
