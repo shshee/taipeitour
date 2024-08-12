@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tangerine.core.model.Attraction
+import com.tangerine.core.model.SharedTransitionTag
 import com.tangerine.taipeitour.compose.others.ImageDisplay
 import com.tangerine.taipeitour.compose.others.myPadding
 import com.tangerine.taipeitour.compose.others.noRippleClickable
@@ -60,80 +61,98 @@ fun MoreAttractionElement(
     val imageSize = 110.dp
     val savingState = remember { mutableStateOf(attraction.isSaved) }
 
-    Card(
-        shape = RoundedCornerShape(10.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .height(imageSize),
-        elevation = CardDefaults.cardElevation(2.dp),
-        onClick = { onViewDetails(attraction) }
-    ) {
-        Row {
-            ImageDisplay(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(imageSize),
-                url = attraction.images.firstOrNull()?.src
-            )
-
-            Box {
-                Column(modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)) {
-                    HtmlText(
-                        text = attraction.name,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    HtmlText(
-                        text = attraction.introduction,
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(com.tangerine.core.source.R.string.view_more),
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-
-                AnimatedContent(
-                    targetState = savingState.value,
-                    transitionSpec = { scaleIn() togetherWith fadeOut() }, label = "",
-                    contentAlignment = Alignment.BottomEnd,
+    with(sharedTransitionScope) {
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .height(imageSize),
+            elevation = CardDefaults.cardElevation(2.dp),
+            onClick = { onViewDetails(attraction) }
+        ) {
+            Row {
+                ImageDisplay(
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .noRippleClickable {
-                            val doSaving = !attraction.isSaved
+                        .fillMaxHeight()
+                        .width(imageSize)
+                        .sharedBounds(
+                            rememberSharedContentState(key = "${SharedTransitionTag.images}/${attraction.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
+                        ),
+                    url = attraction.images.firstOrNull()?.src,
+                )
 
-                            scope.launch {
-                                onModifyBookmark(attraction.id, doSaving).let {
-                                    attraction.isSaved = doSaving
-                                    savingState.value = doSaving //Save to recomposition
+                Box {
+                    Column(modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)) {
+                        HtmlText(
+                            text = attraction.name,
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = "${SharedTransitionTag.title}/${attraction.id}"),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                        )
+                        HtmlText(
+                            text = attraction.introduction,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .weight(1f)
+                                .sharedBounds(
+                                    rememberSharedContentState(key = "${SharedTransitionTag.description}/${attraction.id}"),
+                                    animatedVisibilityScope = animatedVisibilityScope
+                                )
+                        )
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = stringResource(com.tangerine.core.source.R.string.view_more),
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+
+                    AnimatedContent(
+                        targetState = savingState.value,
+                        transitionSpec = { scaleIn() togetherWith fadeOut() }, label = "",
+                        contentAlignment = Alignment.BottomEnd,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .noRippleClickable {
+                                val doSaving = !attraction.isSaved
+
+                                scope.launch {
+                                    onModifyBookmark(attraction.id, doSaving).let {
+                                        attraction.isSaved = doSaving
+                                        savingState.value = doSaving //Save to recomposition
+                                    }
                                 }
                             }
-                        }
-                ) { saved ->
-                    if (!saved) Icon(
-                        imageVector = Icons.Filled.AddCircleOutline,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
-                    ) else Icon(
-                        imageVector = Icons.Filled.CheckCircle,
-                        contentDescription = null,
-                        tint = Color(0xFF28A745),
-                        modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
-                    )
+                    ) { saved ->
+                        if (!saved) Icon(
+                            imageVector = Icons.Filled.AddCircleOutline,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
+                        ) else Icon(
+                            imageVector = Icons.Filled.CheckCircle,
+                            contentDescription = null,
+                            tint = Color(0xFF28A745),
+                            modifier = Modifier.padding(horizontal = myPadding(), vertical = 5.dp)
+                        )
+                    }
                 }
             }
         }
@@ -149,43 +168,34 @@ fun TrendAttractionElement(
     attraction: Attraction,
     modifier: Modifier = Modifier
 ) {
-    with(sharedTransitionScope) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            modifier = modifier
-                .height(200.dp)
-                .width(250.dp),
-            elevation = CardDefaults.cardElevation(2.dp),
-            onClick = { onViewDetails(attraction) }
-        ) {
-            Box {
-                ImageDisplay(
-                    url = attraction.images.firstOrNull()?.src,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .sharedBounds(
-                            rememberSharedContentState(key = "images/${attraction.id}"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            enter = fadeIn(),
-                            exit = fadeOut(),
-                            resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
-                        )
-                )
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        modifier = modifier
+            .height(200.dp)
+            .width(250.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
+        onClick = { onViewDetails(attraction) }
+    ) {
+        Box {
+            ImageDisplay(
+                url = attraction.images.firstOrNull()?.src,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
 
-                HtmlText(
-                    text = attraction.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(
-                            Color.Black.copy(alpha = 0.3f)
-                        )
-                        .fillMaxWidth()
-                        .align(Alignment.BottomStart)
-                        .padding(myPadding())
-                )
-            }
+            HtmlText(
+                text = attraction.name,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier
+                    .background(
+                        Color.Black.copy(alpha = 0.3f)
+                    )
+                    .fillMaxWidth()
+                    .align(Alignment.BottomStart)
+                    .padding(myPadding())
+            )
         }
     }
 }

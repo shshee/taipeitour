@@ -29,3 +29,5 @@ enum class UiState { LOADING, SUCCESS, ERROR, IDLE }
 enum class AttractionsUpdate {
     NEW_LANG, NEW_PAGE, NOTHING
 }
+
+enum class SharedTransitionTag { images, title, description }
