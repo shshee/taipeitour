@@ -27,4 +27,7 @@ dependencies {
 
     implementation(libs.bundles.navigation)
     implementation(libs.gson.core)
+
+    testImplementation(libs.bundles.test.impl)
+    androidTestImplementation(libs.bundles.android.test.impl)
 }

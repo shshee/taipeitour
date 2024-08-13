@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.android.ksp)
+    //alias(libs.plugins.protobuf)
 }
 
 android {
@@ -31,4 +32,30 @@ dependencies {
 
     implementation(libs.bundles.room)
     ksp(libs.room.complier)
+
+    //implementation(libs.bundles.datastore.proto)
+    implementation(libs.datastore.preferences)
+
+    testImplementation(libs.bundles.test.impl)
+    androidTestImplementation(libs.bundles.android.test.impl)
 }
+
+//protobuf {
+//    //Having problem while importing this s...
+//    protoc {
+//        artifact = libs.protobuf.protoc.get().toString()
+//    }
+//
+//    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+//    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+//    // for more information.
+//    generateProtoTasks {
+//        all().forEach { task ->
+//            task.builtins {
+//                create("java") {
+//                    option("lite")
+//                }
+//            }
+//        }
+//    }
+//}

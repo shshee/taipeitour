@@ -1,7 +1,7 @@
-package com.tangerine.core.database.repo
+package com.tangerine.core.database.room.repo
 
-import com.tangerine.core.database.dao.AttractionsDao
-import com.tangerine.core.database.entity.SavedAttractionEntity
+import com.tangerine.core.database.room.dao.AttractionsDao
+import com.tangerine.core.database.room.entity.SavedAttractionEntity
 import com.tangerine.core.model.Attraction
 import com.tangerine.core.ultis.toJson
 import com.tangerine.core.ultis.toObject

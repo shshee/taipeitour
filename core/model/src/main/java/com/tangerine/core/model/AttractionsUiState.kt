@@ -3,11 +3,10 @@ package com.tangerine.core.model
 class AttractionsUiState(var state: UiState, var data: AttractionsData = AttractionsData()) {
     fun updateAttractions(
         newPage: Int,
-        newLang: String,
+        isOnDiffLang: Boolean,
         attractions: List<Attraction>
     ): AttractionsUiState {
         val isOnSamePage = newPage == data.currentPage
-        val isOnDiffLang = newLang != data.currentLang
 
         val newData = if (isOnDiffLang || isOnSamePage) attractions.toMutableList() else data.attractionsList.also {
             it.addAll(attractions)
@@ -21,7 +20,6 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
         return generateNewState(
             UiState.SUCCESS, AttractionsData(
                 currentPage = newPage,
-                currentLang = newLang,
                 attractionsList = newData,
                 updateType = anyUpdates.ordinal
             )
@@ -54,12 +52,10 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
 
 class AttractionsData(
     var currentPage: Int = 1,
-    var currentLang: String = Language.TAIWAN.code,
     var attractionsList: MutableList<Attraction> = mutableListOf(),
     var updateType: Int = AttractionsUpdate.NOTHING.ordinal,
 ) {
     internal var latestError: Throwable? = null
-        get() = field
         set(value) {
             field = value
             if (value == null) updateType = AttractionsUpdate.NOTHING.ordinal

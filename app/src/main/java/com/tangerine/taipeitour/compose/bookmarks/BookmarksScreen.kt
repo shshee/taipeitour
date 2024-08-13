@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tangerine.core.database.repo.AttractionsLocalRepoImpl
+import com.tangerine.core.database.room.repo.AttractionsLocalRepoImpl
 import com.tangerine.taipeitour.compose.others.ImageDisplay
 import org.koin.compose.koinInject
 

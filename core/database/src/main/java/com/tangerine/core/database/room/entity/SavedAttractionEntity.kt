@@ -1,4 +1,4 @@
-package com.tangerine.core.database.entity
+package com.tangerine.core.database.room.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

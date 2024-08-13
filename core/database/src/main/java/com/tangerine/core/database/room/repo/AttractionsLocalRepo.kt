@@ -1,4 +1,4 @@
-package com.tangerine.core.database.repo
+package com.tangerine.core.database.room.repo
 
 import com.tangerine.core.model.Attraction
 import kotlinx.coroutines.flow.Flow

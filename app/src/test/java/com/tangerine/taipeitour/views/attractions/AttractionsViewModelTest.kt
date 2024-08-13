@@ -3,6 +3,7 @@ package com.tangerine.taipeitour.views.attractions
 import com.tangerine.core.api.attractions.AttractionsRepo
 import com.tangerine.core.api.base.BaseRepo
 import com.tangerine.core.model.AttractionsResp
+import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import io.mockk.coEvery
@@ -40,7 +41,7 @@ class AttractionsViewModelTest {
 
     @Test
     fun `get attractions`() {
-        viewModel.getAttractions("en", false)
+        viewModel.getAttractions(Language.ENGLISH, false)
         assertEquals(true, viewModel.attractionUiState.value.state == UiState.SUCCESS)
     }
 }

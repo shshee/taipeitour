@@ -26,7 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.tangerine.core.database.datastore.DataStoreHolder
 import com.tangerine.core.model.Attraction
 import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
@@ -43,8 +46,10 @@ import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreen
 import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreenHead
 import com.tangerine.taipeitour.compose.others.LocalSnackbarHostState
 import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -85,16 +90,24 @@ fun AttractionsScreen(
         }
     }
 
+    //TODO update
+    val selectingLang = rememberSaveable { mutableStateOf(Language.getLanguageFromOrdinal(null)) }
+    koinInject<DataStoreHolder>().let {
+        LaunchedEffect(Unit) {
+            it.getValue(DataStoreHolder.langKey).collectLatest {
+                selectingLang.value = Language.getLanguageFromOrdinal(it)
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AttractionsScreenHead(
                 scrollBehavior = scrollBehavior,
-                title = Language.getLanguageFromCode(uiState.data.currentLang).appName,
+                title = selectingLang.value.appName,
                 updateLanguage = {
-                    viewModel.updateNewLang(
-                        it
-                    )
+                    viewModel.getAttractions(it)
                 })
         },
         floatingActionButton = {

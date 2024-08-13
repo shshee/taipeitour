@@ -33,7 +33,7 @@ class MainXmlActivity : BaseActivity() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                vModel.updateNewLang(com.tangerine.core.model.Language.getLanguageFromOrdinal(menuItem.itemId))
+                vModel.getAttractions(com.tangerine.core.model.Language.getLanguageFromOrdinal(menuItem.itemId))
                 return true
             }
         })

@@ -28,7 +28,6 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.api)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.mockk)
-    testImplementation(libs.test.coroutines)
+    testImplementation(libs.bundles.test.impl)
+    androidTestImplementation(libs.bundles.android.test.impl)
 }

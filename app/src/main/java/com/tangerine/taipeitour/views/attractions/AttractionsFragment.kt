@@ -99,8 +99,7 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
                                 }
 
                                 //Update title according to selecting lang
-                                binding.toolbar.title =
-                                    Language.getLanguageFromCode(it.currentLang).appName
+                                //binding.toolbar.title = Language.getLanguageFromOrdinal(aVModel.currentLang).appName
                             }
 
                             UiState.ERROR -> Toast.makeText(

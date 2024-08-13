@@ -1,10 +1,10 @@
-package com.tangerine.core.database.dao
+package com.tangerine.core.database.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.tangerine.core.database.entity.SavedAttractionEntity
+import com.tangerine.core.database.room.entity.SavedAttractionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

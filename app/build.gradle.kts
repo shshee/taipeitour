@@ -68,12 +68,9 @@ dependencies {
     implementation(libs.navigation.ui)
     annotationProcessor(libs.glide.complier)
 
+    implementation(libs.datastore.preferences)
     implementation(libs.airbnb.lottie)
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.mockk)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.coroutines)
-    androidTestImplementation(libs.android.test.junit)
-    androidTestImplementation(libs.android.test.espresso)
+    testImplementation(libs.bundles.test.impl)
+    androidTestImplementation(libs.bundles.android.test.impl)
 }

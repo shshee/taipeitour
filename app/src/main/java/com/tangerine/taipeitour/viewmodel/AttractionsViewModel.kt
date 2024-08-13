@@ -1,10 +1,10 @@
 package com.tangerine.taipeitour.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tangerine.core.api.attractions.AttractionsRepo
 import com.tangerine.core.api.base.BaseRepo
-import com.tangerine.core.database.repo.AttractionsLocalRepoImpl
+import com.tangerine.core.database.datastore.DataStoreHolder
+import com.tangerine.core.database.room.repo.AttractionsLocalRepoImpl
 import com.tangerine.core.model.Attraction
 import com.tangerine.core.model.AttractionsResp
 import com.tangerine.core.model.AttractionsUiState
@@ -15,6 +15,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -29,25 +31,35 @@ class AttractionsViewModel(
     private val attractionsLocalRepo: AttractionsLocalRepoImpl by inject()
 
     init {
-        getAttractions()
+        viewModelScope.launch(dispatcher) {
+            getAttractions()
+        }
     }
 
-    fun getAttractions(lang: String? = null, goNextPage: Boolean = false) {
-        val data = attractionUiState.value.data
-
+    fun getAttractions(lang: Language? = null, goNextPage: Boolean = false) {
         val newPage = 1 //data.currentPage + (if (goNextPage) 1 else 0)
-        val newLang = lang ?: data.currentLang
-
         viewModelScope.launch(dispatcher) {
+            val dataStore: DataStoreHolder by inject()
+            val savedLang =
+                Language.getLanguageFromOrdinal(dataStore.getValue(DataStoreHolder.langKey).first())
+            val newLang = lang ?: savedLang
+
             _attractionsUiState.let {
                 it.value = it.value.updateLoading()
 
-                attractionsRepo.getAttractions(lang = newLang, page = newPage).collect { api ->
+                attractionsRepo.getAttractions(lang = newLang.code, page = newPage).collect { api ->
                     when (api) {
                         is BaseRepo.ApiResponse.Success<*> -> {
+                            val isOnDiffLang = (newLang != savedLang).also { con ->
+                                if (con) dataStore.setValue(
+                                    DataStoreHolder.langKey,
+                                    newLang.ordinal
+                                )
+                            }
+
                             it.value = it.value.updateAttractions(
                                 newPage,
-                                newLang,
+                                isOnDiffLang,
                                 updateBookmarked(
                                     (api.response as AttractionsResp).data,
                                     attractionsLocalRepo.getAllSavedAttrIds()
@@ -61,10 +73,6 @@ class AttractionsViewModel(
                 }
             }
         }
-    }
-
-    fun updateNewLang(newValue: Language) {
-        getAttractions(newValue.code)
     }
 
     private fun updateBookmarked(

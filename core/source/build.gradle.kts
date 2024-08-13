@@ -21,3 +21,8 @@ android {
         jvmTarget = "1.8"
     }
 }
+
+dependencies {
+    implementation(libs.bundles.size)
+    implementation(libs.material.design)
+}
