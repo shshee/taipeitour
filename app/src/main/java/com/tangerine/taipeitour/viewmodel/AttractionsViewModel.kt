@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -29,16 +28,24 @@ class AttractionsViewModel(
         MutableStateFlow(AttractionsUiState(UiState.LOADING))
     val attractionUiState: StateFlow<AttractionsUiState> = _attractionsUiState
     private val attractionsLocalRepo: AttractionsLocalRepoImpl by inject()
+    var forceReload: Boolean = false
+        get() {
+            return if (field) {
+                field = false
+                true
+            } else false
+        }
+    //private set
 
     init {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             getAttractions()
         }
     }
 
-    fun getAttractions(lang: Language? = null, goNextPage: Boolean = false) {
-        val newPage = 1 //data.currentPage + (if (goNextPage) 1 else 0)
-        viewModelScope.launch(dispatcher) {
+    suspend fun getAttractions(lang: Language? = null, goNextPage: Boolean = false): Boolean {
+        val job = viewModelScope.async(dispatcher) {
+            val newPage = 1 //data.currentPage + (if (goNextPage) 1 else 0)
             val dataStore: DataStoreHolder by inject()
             val savedLang =
                 Language.getLanguageFromOrdinal(dataStore.getValue(DataStoreHolder.langKey).first())
@@ -47,32 +54,29 @@ class AttractionsViewModel(
             _attractionsUiState.let {
                 it.value = it.value.updateLoading()
 
-                attractionsRepo.getAttractions(lang = newLang.code, page = newPage).collect { api ->
-                    when (api) {
-                        is BaseRepo.ApiResponse.Success<*> -> {
-                            val isOnDiffLang = (newLang != savedLang).also { con ->
-                                if (con) dataStore.setValue(
-                                    DataStoreHolder.langKey,
-                                    newLang.ordinal
+                attractionsRepo.getAttractions(lang = newLang.code, page = newPage).first()
+                    .let { api ->
+                        when (api) {
+                            is BaseRepo.ApiResponse.Success<*> -> {
+                                it.value = it.value.updateAttractions(
+                                    newPage,
+                                    updateBookmarked(
+                                        (api.response as AttractionsResp).data,
+                                        attractionsLocalRepo.getAllSavedAttrIds()
+                                    )
                                 )
                             }
 
-                            it.value = it.value.updateAttractions(
-                                newPage,
-                                isOnDiffLang,
-                                updateBookmarked(
-                                    (api.response as AttractionsResp).data,
-                                    attractionsLocalRepo.getAllSavedAttrIds()
-                                )
-                            )
+                            is BaseRepo.ApiResponse.Failure -> it.value =
+                                it.value.updateError(api.throwable, newPage != 1)
                         }
 
-                        is BaseRepo.ApiResponse.Failure -> it.value =
-                            it.value.updateError(api.throwable)
+                        return@async true
                     }
-                }
             }
         }
+
+        return job.await()
     }
 
     private fun updateBookmarked(

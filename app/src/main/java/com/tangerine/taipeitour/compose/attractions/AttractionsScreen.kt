@@ -46,7 +46,9 @@ import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreen
 import com.tangerine.taipeitour.compose.attractions.components.AttractionsScreenHead
 import com.tangerine.taipeitour.compose.others.LocalSnackbarHostState
 import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -62,6 +64,7 @@ fun AttractionsScreen(
     viewModel: AttractionsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.attractionUiState.collectAsState()
+    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val swipeRefreshState = rememberSwipeRefreshState(uiState.state == UiState.LOADING)
 
@@ -74,7 +77,7 @@ fun AttractionsScreen(
         LaunchedEffect(Unit) {
             val result = snackbarHostState
                 .showSnackbar(
-                    message = message,
+                    message = "This language seems like not available at this moment.\nPlease change to another one.",
                     //actionLabel = retry,
                     duration = SnackbarDuration.Short
                 )
@@ -90,12 +93,17 @@ fun AttractionsScreen(
         }
     }
 
-    //TODO update
-    val selectingLang = rememberSaveable { mutableStateOf(Language.getLanguageFromOrdinal(null)) }
+    val selectingLang = rememberSaveable { mutableStateOf("") }
     koinInject<DataStoreHolder>().let {
         LaunchedEffect(Unit) {
-            it.getValue(DataStoreHolder.langKey).collectLatest {
-                selectingLang.value = Language.getLanguageFromOrdinal(it)
+            it.getValue(DataStoreHolder.langKey).first().let {
+                selectingLang.value = Language.getLanguageFromOrdinal(it).appName
+
+                if (viewModel.forceReload) {
+                    viewModel.getAttractions().let {
+                        scrollState.scrollToItem(0)
+                    }
+                }
             }
         }
     }
@@ -105,10 +113,8 @@ fun AttractionsScreen(
         topBar = {
             AttractionsScreenHead(
                 scrollBehavior = scrollBehavior,
-                title = selectingLang.value.appName,
-                updateLanguage = {
-                    viewModel.getAttractions(it)
-                })
+                title = selectingLang.value
+            )
         },
         floatingActionButton = {
             AnimatedVisibility(
@@ -116,7 +122,6 @@ fun AttractionsScreen(
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                val scope = rememberCoroutineScope()
                 IconButton(
                     onClick = {
                         scope.launch { scrollState.animateScrollToItem(0) }
@@ -139,7 +144,9 @@ fun AttractionsScreen(
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
-                viewModel.getAttractions()
+                scope.launch {
+                    viewModel.getAttractions()
+                }
             },
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(

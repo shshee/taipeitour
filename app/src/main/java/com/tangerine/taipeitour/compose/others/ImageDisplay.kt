@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImagePainter
@@ -33,8 +34,8 @@ fun ImageDisplay(
         modifier = modifier
             .placeholder(
                 visible = showPlaceHolder.value,
-                color = MaterialTheme.colorScheme.primary,
-                highlight = PlaceholderHighlight.shimmer(highlightColor = MaterialTheme.colorScheme.inversePrimary)
+                color = Color.Gray,
+                highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White)
             )
     ) {
         val state = painter.state

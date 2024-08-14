@@ -12,8 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
-import com.tangerine.core.model.AttractionsUpdate
-import com.tangerine.core.model.Language
 import com.tangerine.core.model.UiState
 import com.tangerine.core.source.R
 import com.tangerine.taipeitour.databinding.FragmentAttractionsBinding
@@ -86,20 +84,8 @@ class AttractionsFragment : BaseFragment<FragmentAttractionsBinding>() {
 
                     uiState.data.let {
                         when (uiState.state) {
-                            UiState.SUCCESS, UiState.IDLE -> {
+                            UiState.SUCCESS -> {
                                 attractionsAdapter.collection = it.attractionsList
-
-                                //Scroll back to start in new lang was updated
-                                when (it.updateType) {
-                                    AttractionsUpdate.NEW_LANG.ordinal -> binding.rvAttractions.smoothScrollToPosition(
-                                        0
-                                    )
-
-                                    else -> {}
-                                }
-
-                                //Update title according to selecting lang
-                                //binding.toolbar.title = Language.getLanguageFromOrdinal(aVModel.currentLang).appName
                             }
 
                             UiState.ERROR -> Toast.makeText(

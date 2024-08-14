@@ -10,9 +10,11 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -36,11 +38,11 @@ class AttractionsViewModelTest {
             }.flowOn(UnconfinedTestDispatcher())
         }
 
-        viewModel = AttractionsViewModel(UnconfinedTestDispatcher(),repo)
+        viewModel = AttractionsViewModel(UnconfinedTestDispatcher(), repo)
     }
 
     @Test
-    fun `get attractions`() {
+    fun `get attractions`() = runTest {
         viewModel.getAttractions(Language.ENGLISH, false)
         assertEquals(true, viewModel.attractionUiState.value.state == UiState.SUCCESS)
     }

@@ -28,8 +28,7 @@ import com.tangerine.core.model.Language
 @Composable
 fun AttractionsScreenHead(
     scrollBehavior: TopAppBarScrollBehavior,
-    title: String,
-    updateLanguage: (Language) -> Unit
+    title: String
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
 
@@ -48,14 +47,13 @@ fun AttractionsScreenHead(
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
-            }, actions = {
-                LanguagesOptions(updateLanguage = updateLanguage)
             },
             scrollBehavior = scrollBehavior
         )
     }
 }
 
+//Implementation of dropdown menu
 @Composable
 fun LanguagesOptions(updateLanguage: (Language) -> Unit, modifier: Modifier = Modifier) {
     var expanded by remember { mutableStateOf(false) }

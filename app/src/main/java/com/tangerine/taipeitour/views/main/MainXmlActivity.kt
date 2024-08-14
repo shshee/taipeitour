@@ -6,10 +6,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.lifecycleScope
 import com.tangerine.taipeitour.R
 import com.tangerine.taipeitour.databinding.ActivityMainBinding
 import com.tangerine.taipeitour.viewmodel.AttractionsViewModel
 import com.tangerine.taipeitour.views.base.BaseActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.androidx.scope.activityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -33,7 +38,13 @@ class MainXmlActivity : BaseActivity() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                vModel.getAttractions(com.tangerine.core.model.Language.getLanguageFromOrdinal(menuItem.itemId))
+                lifecycleScope.launch(Dispatchers.Default) {
+                    vModel.getAttractions(
+                        com.tangerine.core.model.Language.getLanguageFromOrdinal(
+                            menuItem.itemId
+                        )
+                    )
+                }
                 return true
             }
         })

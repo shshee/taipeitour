@@ -46,12 +46,12 @@ fun AttractionDetailsScreen(
         item.images.size
     }
 
-    LaunchedEffect(pagerState) {
-        // Collect from the a snapshotFlow reading the currentPage
-        snapshotFlow { pagerState.currentPage }.collect { page ->
-            //pagerState.animateScrollToPage((page + 1) % item.images.size)
-        }
-    }
+//    LaunchedEffect(pagerState) {
+//        // Collect from the a snapshotFlow reading the currentPage
+//        snapshotFlow { pagerState.currentPage }.collect { page ->
+//            //pagerState.animateScrollToPage((page + 1) % item.images.size)
+//        }
+//    }
 
     with(sharedTransitionScope) {
         Column(

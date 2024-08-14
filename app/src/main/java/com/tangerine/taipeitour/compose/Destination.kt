@@ -3,13 +3,16 @@ package com.tangerine.taipeitour.compose
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.tangerine.taipeitour.R
 
 /**
  * Contract for information needed on every Rally navigation destination
@@ -55,6 +58,21 @@ object BookmarksPage : MainScreen() {
     override val route = "bookmarks"
 }
 
+object MorePage : MainScreen() {
+    override val title = com.tangerine.core.source.R.string.more
+    override val iconEnabled = Icons.Filled.MoreHoriz
+    override val iconDisabled = Icons.Filled.Menu
+
+    override val route = "more"
+}
+
+object SettingsPage : MainScreen() {
+    override val title = com.tangerine.core.source.R.string.settings
+    override val iconEnabled = Icons.Filled.Settings
+    override val iconDisabled = Icons.Outlined.Settings
+    override val route = "${MorePage.route}/settings"
+}
 
 // Screens to be displayed in the top RallyTabRow
-val bottomTabScreens = listOf(AttractionsPage, BookmarksPage)
+val bottomTabScreens = listOf(AttractionsPage, BookmarksPage, MorePage)
+val morePageScreens = listOf(SettingsPage)

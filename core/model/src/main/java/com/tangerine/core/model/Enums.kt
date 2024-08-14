@@ -24,10 +24,6 @@ enum class Language(val code: String, val title: Int, val appName: String) {
 
 enum class AnimType { SLIDE_LEFT, SLIDE_RIGHT, SLIDE_BOTTOM, SLIDE_TOP, FADE }
 
-enum class UiState { LOADING, SUCCESS, ERROR, IDLE }
-
-enum class AttractionsUpdate {
-    NEW_LANG, NEW_PAGE, NOTHING
-}
+enum class UiState { LOADING, SUCCESS, ERROR }
 
 enum class SharedTransitionTag { images, title, description }
