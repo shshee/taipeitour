@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepclassmembernames class com.tangerine.core.model.Attraction {<fields>;}
+-keepclassmembernames class com.tangerine.core.model.AttractionsResp {<fields>;}

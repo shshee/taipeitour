@@ -101,7 +101,10 @@ fun AttractionsScreen(
 
                 if (viewModel.forceReload) {
                     viewModel.getAttractions().let {
-                        scrollState.scrollToItem(0)
+                        try {
+                            scrollState.scrollToItem(0)
+                        } catch (ex: Exception) {
+                        }
                     }
                 }
             }

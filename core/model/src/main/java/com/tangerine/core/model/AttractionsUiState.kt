@@ -21,12 +21,13 @@ class AttractionsUiState(var state: UiState, var data: AttractionsData = Attract
 
     fun updateLoading() = generateNewState(UiState.LOADING)
 
-    fun updateError(ex: Throwable, isNewPage: Boolean) = generateNewState(UiState.ERROR, data.apply {
-        latestError = ex
+    fun updateError(ex: Throwable, isNewPage: Boolean) =
+        generateNewState(UiState.ERROR, data.apply {
+            latestError = ex
 
-        //Clear latest data if new language was selected
-        if(!isNewPage) data.attractionsList.clear()
-    })
+            //Clear latest data if new language was selected
+            if (!isNewPage) data.attractionsList = mutableListOf()
+        })
 
     fun handleError(): String? {
         val current = data.latestError?.message

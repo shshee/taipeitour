@@ -10,6 +10,9 @@ import android.text.Spanned
 import android.view.View
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.Arrays
+
+
 
 @SuppressLint("MissingPermission")
 fun Context.isNetworkAvailable(): Boolean {
@@ -73,4 +76,8 @@ inline fun <reified T> toObject(str: String?): T? {
 inline fun <reified T> toList(str: String?): T? {
     if (str == null) return null
     return Gson().fromJson(str, object : TypeToken<T>() {}.type)
+}
+
+fun <T> parseGsonArray(json: String?, model: Class<Array<T>>?): List<T> {
+    return Arrays.asList(*Gson().fromJson(json, model))
 }

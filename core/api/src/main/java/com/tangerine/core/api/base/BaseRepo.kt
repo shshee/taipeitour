@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.retry
 import retrofit2.Call
+import retrofit2.Response
 
-
-abstract class BaseRepo(private val dispatcher: CoroutineDispatcher) {
-    private var currentDelay = 3000L
-    private var retries = 3L
+abstract class BaseRepo(val dispatcher: CoroutineDispatcher) {
+    var currentDelay = 3000L
+    var retries = 3L
 
     sealed interface ApiResponse {
         class Success<T>(val response: T) : ApiResponse
@@ -21,15 +21,15 @@ abstract class BaseRepo(private val dispatcher: CoroutineDispatcher) {
         data class Failure(val throwable: Throwable) : ApiResponse
     }
 
-    fun <T> request(
-        call: Call<T>
+    inline fun <T> request(
+        crossinline request: suspend () -> Response<T>
     ): Flow<ApiResponse> = flow {
-        val response = call.clone().execute() //Make sure new call will be created
-
-        when {
-            !response.isSuccessful -> throw Throwable("${response.code()}: ${response.errorBody()}")
-            response.body() == null -> throw Throwable("Empty response !")
-            else -> emit(ApiResponse.Success(response.body()) as ApiResponse)
+        request.invoke().let { response ->
+            when {
+                !response.isSuccessful -> throw Throwable("${response.code()}: ${response.errorBody()}")
+                response.body() == null -> throw Throwable("Empty response !")
+                else -> emit(ApiResponse.Success(response.body()) as ApiResponse)
+            }
         }
     }.flowOn(dispatcher).retry(retries = retries) {
         delay(currentDelay)

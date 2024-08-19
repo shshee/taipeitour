@@ -2,6 +2,7 @@ package com.tangerine.core.api.attractions
 
 import com.tangerine.core.model.AttractionsResp
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -16,5 +17,5 @@ internal interface AttractionsApi {
     //TODO remove call here
     @Headers("Accept: application/json")
     @GET(ATTRACTIONS_ALL)
-    fun getAttractions(@Path(LANG) lang: String, @Query("page") page: Int?=null): Call<AttractionsResp>
+    suspend fun getAttractions(@Path(LANG) lang: String, @Query("page") page: Int?=null): Response<AttractionsResp>
 }
